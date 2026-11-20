@@ -5,7 +5,7 @@ This site contains the GP2 conceptual architecture and a date-filtered team chec
 ## Team use
 
 - On **Home**, select a team member. **Due through today** includes every assigned task scheduled through the current date. **Next 7 days** covers tomorrow through the seventh following calendar day, using Cairo time. Checkboxes save separately by task ID in this browser. Clearing browser data removes the saved checkmarks.
-- In **Architecture**, select a component or connection to inspect it. Use **Edit diagram** to move components, change technology or labels, add components, and drag between handles to connect them. A layer can be opened from the navigation or from its component.
+- In **Architecture**, select a component or connection to inspect it. Drag a component to move it or drag the blank canvas to pan. Use **Edit diagram** to change technology or labels, add components, and drag between handles to connect them. A layer can be opened from the navigation or from its component.
 - Changes to a diagram save as a browser draft. **Export JSON** creates a file to share. **Import JSON** replaces the local draft after confirmation. Resetting loads the current published baseline.
 
 The schedule includes the publicly approved team assignments. Team member selection is a view filter. Browser-local drafts and checkmarks are independent across devices and users.

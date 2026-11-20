@@ -34,7 +34,7 @@ function NodeCard({ data, selected }) {
       <strong>{data.label || 'Untitled component'}</strong>
       <span className="node-summary">{data.summary}</span>
       {data.technology && <span className="node-tech">
-        {mark ? <img src={`${ASSETS}icons/${mark}.svg`} width="15" height="15" alt="" /> : <CircuitBoard size={14} />}
+        {mark ? <img src={`${ASSETS}icons/${mark}.svg`} width="15" height="15" alt="" draggable={false} /> : <CircuitBoard size={14} />}
         {data.technology}
       </span>}
     </div>
@@ -54,7 +54,7 @@ function Diagram({ graph, selection, editing, select, move, connect, reconnect, 
   })), [graph.nodes, positions, editing, selection]);
   const edges = useMemo(() => graph.edges.map(edge => ({
     id: edge.id, source: edge.source, target: edge.target, sourceHandle: edge.sourcePort, targetHandle: edge.targetPort,
-    label: edge.label, type: 'smoothstep', pathOptions: { offset: edge.kind === 'enrichment' ? 43 : 19 }, selected: selection?.type === 'edge' && edge.id === selection.id,
+    label: edge.label, className: 'nopan', type: 'smoothstep', pathOptions: { offset: edge.kind === 'enrichment' ? 43 : 19 }, selected: selection?.type === 'edge' && edge.id === selection.id,
     style: { stroke: EDGE_COLORS[edge.kind], strokeWidth: selection?.id === edge.id ? 3 : 1.7, strokeDasharray: edge.kind === 'control' ? '7 5' : undefined },
     markerEnd: { type: MarkerType.ArrowClosed, color: EDGE_COLORS[edge.kind], width: 19, height: 19 },
     labelStyle: { fill: '#c6d8e8', fontSize: 11 },
@@ -63,7 +63,7 @@ function Diagram({ graph, selection, editing, select, move, connect, reconnect, 
   })), [graph.edges, selection]);
   return (
     <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes}
-      colorMode="dark" connectionMode={ConnectionMode.Loose} nodesDraggable={editing} nodesConnectable={editing}
+      colorMode="dark" connectionMode={ConnectionMode.Loose} nodesDraggable nodesConnectable={editing} autoPanOnNodeDrag={false} autoPanOnConnect={false}
       edgesReconnectable={editing} deleteKeyCode={null} multiSelectionKeyCode={null}
       selectionKeyCode={null} minZoom={0.16} maxZoom={2.5} fitView fitViewOptions={{ padding: '8%', maxZoom: scope === ROOT ? .95 : 1.12 }}
       isValidConnection={validConnection}
@@ -265,9 +265,12 @@ function App() {
           </div>}
         </aside>
         <section className={`canvas ${editing ? 'is-editing' : ''}`} aria-label="Architecture diagram">
-          <div className="canvas-mode"><span />{editing ? 'Editing local draft' : 'Explore architecture'}</div>
+          <div className="canvas-mode"><span />Drag a component to move it · Drag empty space to pan</div>
           <Diagram key={scope} scope={scope} graph={graph} selection={selection} editing={editing} select={setSelection}
-            move={(id, { x, y }) => setDoc(d => updateItem(d, scope, 'nodes', id, { x, y }))}
+            move={(id, { x, y }) => setDoc(d => {
+              const node = d.graphs[scope].nodes.find(n => n.id === id);
+              return !node || (node.x === x && node.y === y) ? d : updateItem(d, scope, 'nodes', id, { x, y });
+            })}
             connect={connect} reconnect={reconnect} openDetails={id => { if (scope === ROOT) go(id); }} />
           {graph.nodes.length === 0 && <p className="empty-canvas">This layer is empty. {editing ? 'Add a component to get started.' : 'Switch to Edit diagram to add a component.'}</p>}
         </section>
@@ -282,7 +285,7 @@ function App() {
       </div>
       <footer>
         <div className="legend"><span><i className="data" /> Data flow</span><span><i className="enrichment" /> Enrichment</span><span><i className="control" /> Control flow</span></div>
-        <span role="status">{status || (editing ? 'Drafts save in this browser. Export JSON to share changes.' : 'Conceptual design · Tool choices can be edited')}</span>
+        <span role="status">{status || (editing ? 'Drafts save in this browser. Export JSON to share changes.' : 'Component positions save in this browser.')}</span>
         {editing && <button className="reset" onClick={() => {
           if (window.confirm('Reset your local draft to the published architecture? Export your draft first if you want to keep it.')) {
             setDoc(seeded); setScope(ROOT); setSelection(null); setSearch(''); setStatus('Published baseline restored.');
