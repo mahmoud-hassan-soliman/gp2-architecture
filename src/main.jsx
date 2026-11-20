@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Background, BackgroundVariant, ConnectionMode, Controls, Handle, MarkerType, Position, ReactFlow, useReactFlow } from '@xyflow/react';
 import { ArrowDownToLine, ArrowUpFromLine, ChevronRight, CircuitBoard, GitFork, Hand, Layers3, Maximize, MousePointer2, Network, PenLine, Plus, RotateCcw, X } from 'lucide-react';
 import '@xyflow/react/dist/style.css';
+import '@fontsource/ibm-plex-sans-arabic/arabic-500.css';
 import './style.css';
 import initial from './architecture.json';
 import { Tasks } from './Tasks.jsx';

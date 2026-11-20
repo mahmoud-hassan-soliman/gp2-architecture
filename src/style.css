@@ -8,6 +8,7 @@
   --line: #283a51;
   --muted: #a5b5c9;
   --teal: #6ce5d8;
+  --arabic-tech: 'IBM Plex Sans Arabic', Arial, sans-serif;
 }
 * { box-sizing: border-box; }
 body { margin: 0; }
@@ -72,8 +73,8 @@ h1 { font-size: clamp(30px, 4vw, 46px); line-height: 1.12; letter-spacing: -.045
 .canvas.is-panning .react-flow__pane:active { cursor: grabbing; }
 .connection-grip { pointer-events: stroke; cursor: grab; touch-action: none; }
 .connection-grip:active { cursor: grabbing; }
-.node-note { position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; padding: 5px 8px; border: 1px solid #405875; border-radius: 7px; background: #15243a; color: #edf5ff; font-size: 17px; line-height: 1.35; text-align: right; font-family: Arial, sans-serif; }
-.inspector .inspector-note { font-size: 15px; color: #e3eef9; }
+.node-note { position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; padding: 5px 8px; border: 1px solid #405875; border-radius: 7px; border-inline-start: 2px solid var(--accent); background: #132139; color: #e5f0ff; font: 500 17px/1.35 var(--arabic-tech); text-align: right; }
+.inspector .inspector-note, .fields textarea[lang='ar'] { color: #e3eef9; font: 500 16px/1.55 var(--arabic-tech); }
 .node-card {
   width: 224px; min-height: 121px; display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; overflow-wrap: anywhere; user-select: none;
   background: #1a293d; border: 1px solid color-mix(in srgb, var(--accent), #1c2c44 55%); border-radius: 12px;

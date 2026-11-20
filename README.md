@@ -22,3 +22,5 @@ npm run build -- --outDir docs
 ```
 
 GitHub Pages serves `docs/` from `main`. Build and commit both source and generated pages when publishing changes. Technology icons are included locally with attribution in `public/icons/`.
+
+Arabic annotations use the locally bundled IBM Plex Sans Arabic font, with its license in `public/licenses/`.
