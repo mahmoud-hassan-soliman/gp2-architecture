@@ -7,6 +7,7 @@ import './style.css';
 import initial from './architecture.json';
 import { Tasks } from './Tasks.jsx';
 import { ConnectionEdge } from './Connection.jsx';
+import { routeDiagram } from './routing.js';
 import { canConnect, CATEGORIES, changeGraph, deleteSelection, EDGE_KINDS, PORTS, ROOT, updateItem, validateArchitecture } from './model.js';
 
 const STORAGE = 'gp2-architecture-draft-v2';
@@ -30,10 +31,24 @@ function loadDraft() {
 }
 
 function NodeCard({ data, selected }) {
+  const cardRef = useRef(null);
+  const noteRef = useRef(null);
+  const { id, reportSize } = data;
+  const note = arabicNote(data);
+  useEffect(() => {
+    const card = cardRef.current;
+    const text = noteRef.current;
+    const measure = () => reportSize(id, { width: card.offsetWidth, height: card.offsetHeight, noteHeight: text?.offsetHeight || 0 });
+    const observer = new ResizeObserver(measure);
+    observer.observe(card);
+    if (text) observer.observe(text);
+    measure();
+    return () => observer.disconnect();
+  }, [id, reportSize, Boolean(note)]);
   const mark = TECH[data.technology.trim().toLowerCase()];
   return (
-    <div className={`node-card ${data.category} ${selected ? 'selected' : ''}`}>
-      {arabicNote(data) && <span className="node-note" lang="ar" dir="rtl">{arabicNote(data)}</span>}
+    <div ref={cardRef} className={`node-card ${data.category} ${selected ? 'selected' : ''}`}>
+      {note && <span ref={noteRef} className="node-note" lang="ar" dir="rtl">{note}</span>}
       {PORTS.map(port => <Handle key={port} type="source" id={port} position={PORT_POSITIONS[port]} isConnectable={data.editing} />)}
       <span className="node-category"><span />{CATEGORY_LABELS[data.category]}</span>
       <strong>{data.label || 'Untitled component'}</strong>
@@ -47,26 +62,39 @@ function NodeCard({ data, selected }) {
 }
 
 const nodeTypes = { card: NodeCard };
-const edgeTypes = { draggableConnection: ConnectionEdge };
+const edgeTypes = { routedConnection: ConnectionEdge };
 
-function Diagram({ graph, selection, editing, panning, select, move, saveBend, connect, reconnect, openDetails, scope }) {
+function Diagram({ graph, selection, editing, panning, select, move, connect, reconnect, openDetails, scope }) {
   const movedDuringDrag = useRef({});
   const [positions, setPositions] = useState({});
+  const [sizes, setSizes] = useState({});
+  const reportSize = useCallback((id, next) => setSizes(current => {
+    const old = current[id];
+    return old && old.width === next.width && old.height === next.height && old.noteHeight === next.noteHeight
+      ? current : { ...current, [id]: next };
+  }), []);
+  const routes = useMemo(() => routeDiagram(graph.nodes.map(n => ({
+    id: n.id, ...(positions[n.id] || { x: n.x, y: n.y }),
+    ...(sizes[n.id] || { width: 224, height: 121, noteHeight: arabicNote(n) ? 56 : 0 })
+  })), graph.edges), [graph.nodes, graph.edges, positions, sizes]);
   const validConnection = useCallback(connection => canConnect(graph, connection), [graph]);
   const nodes = useMemo(() => graph.nodes.map(node => ({
     id: node.id, type: 'card', position: positions[node.id] || { x: node.x, y: node.y },
-    data: { ...node, editing }, selected: selection?.type === 'node' && node.id === selection.id,
+    data: { ...node, editing, reportSize }, selected: selection?.type === 'node' && node.id === selection.id,
     ariaLabel: node.label || 'Untitled component'
-  })), [graph.nodes, positions, editing, selection]);
-  const edges = useMemo(() => graph.edges.map(edge => ({
-    id: edge.id, source: edge.source, target: edge.target, sourceHandle: edge.sourcePort, targetHandle: edge.targetPort,
-    label: edge.label, className: 'nopan', type: 'draggableConnection', data: { bend: edge.bend, saveBend, select, panning }, pathOptions: { offset: edge.kind === 'enrichment' ? 43 : 19 }, selected: selection?.type === 'edge' && edge.id === selection.id,
+  })), [graph.nodes, positions, editing, selection, reportSize]);
+  const edges = useMemo(() => graph.edges.map(edge => {
+    const route = routes?.get(edge.id);
+    return {
+    id: edge.id, source: edge.source, target: edge.target, sourceHandle: route?.sourcePort ?? edge.sourcePort, targetHandle: route?.targetPort ?? edge.targetPort,
+    label: edge.label, className: 'nopan', type: 'routedConnection', data: { route }, selected: selection?.type === 'edge' && edge.id === selection.id,
     style: { stroke: EDGE_COLORS[edge.kind], strokeWidth: selection?.id === edge.id ? 3 : 1.7, strokeDasharray: edge.kind === 'control' ? '7 5' : undefined },
     markerEnd: { type: MarkerType.ArrowClosed, color: EDGE_COLORS[edge.kind], width: 19, height: 19 },
     labelStyle: { fill: '#c6d8e8', fontSize: 11 },
     labelBgStyle: { fill: '#101c2d', fillOpacity: .96 }, labelBgPadding: [5, 4], labelBgBorderRadius: 4,
     ariaLabel: edge.label || 'Unlabelled connection'
-  })), [graph.edges, selection, panning, select, saveBend]);
+    };
+  }), [graph.edges, selection, routes]);
   return (
     <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes}
       colorMode="dark" connectionMode={ConnectionMode.Loose} nodesDraggable={!panning} nodesConnectable={editing && !panning} autoPanOnNodeDrag={false} autoPanOnConnect={false}
@@ -130,7 +158,6 @@ function Inspector({ item, selection, editing, patch, remove, graph, details, op
         <label>Arabic note<textarea rows={2} lang="ar" dir="rtl" value={arabicNote(item)} maxLength={180} onChange={e => patch({ noteAr: e.target.value })} /></label>
         <label>Details<textarea rows={4} value={item.notes} maxLength={3000} onChange={e => patch({ notes: e.target.value })} /></label>
       </> : <>
-        {item.bend && <button onClick={() => patch({ bend: undefined })}>Reset connection route</button>}
         <label>Flow type<select value={item.kind} onChange={e => patch({ kind: e.target.value })}>{EDGE_KINDS.map(k => <option key={k}>{k}</option>)}</select></label>
         <label>From<select value={item.source} onChange={e => patch({ source: e.target.value })}>{graph.nodes.filter(n => n.id !== item.target).map(n => <option key={n.id} value={n.id}>{n.label}</option>)}</select></label>
         <label>To<select value={item.target} onChange={e => patch({ target: e.target.value })}>{graph.nodes.filter(n => n.id !== item.source).map(n => <option key={n.id} value={n.id}>{n.label}</option>)}</select></label>
@@ -285,7 +312,6 @@ function App() {
               const node = d.graphs[scope].nodes.find(n => n.id === id);
               return !node || (node.x === x && node.y === y) ? d : updateItem(d, scope, 'nodes', id, { x, y });
             })}
-            saveBend={(id, bend) => setDoc(d => updateItem(d, scope, 'edges', id, { bend }))}
             connect={connect} reconnect={reconnect} openDetails={id => { if (scope === ROOT) go(id); }} />
           {graph.nodes.length === 0 && <p className="empty-canvas">This layer is empty. {editing ? 'Add a component to get started.' : 'Switch to Edit diagram to add a component.'}</p>}
         </section>
