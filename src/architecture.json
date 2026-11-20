@@ -11,7 +11,8 @@
           "category": "gray",
           "x": 0,
           "y": 0,
-          "notes": "Evaluate candidate sources LinkedIn, Wuzzuf, Bayt and JSearch API. Record permission, country coverage, fields, rate limits, pagination, acquisition limits and retention. Use one authorized connector for MVP."
+          "notes": "Evaluate candidate sources LinkedIn, Wuzzuf, Bayt and JSearch API. Record permission, country coverage, fields, rate limits, pagination, acquisition limits and retention. Use one authorized connector for MVP.",
+          "noteAr": "من هنا بنحدد مصادر إعلانات الوظائف اللي ممكن نستخدمها."
         },
         {
           "id": "ingestion",
@@ -21,7 +22,8 @@
           "category": "blue",
           "x": 285,
           "y": 0,
-          "notes": "Use run UUID and per-page checkpoint after commit. Retry transient 429 and 5xx with Retry-After, jitter and cap. Schedule with cron or manual command."
+          "notes": "Use run UUID and per-page checkpoint after commit. Retry transient 429 and 5xx with Retry-After, jitter and cap. Schedule with cron or manual command.",
+          "noteAr": "بنجمع الإعلانات من المصدر المصرّح به على دفعات."
         },
         {
           "id": "raw",
@@ -31,7 +33,8 @@
           "category": "blue",
           "x": 570,
           "y": 0,
-          "notes": "Write atomically via temp file, then register manifest. Save provider ID, publication value/version when present, ingest time and source identity."
+          "notes": "Write atomically via temp file, then register manifest. Save provider ID, publication value/version when present, ingest time and source identity.",
+          "noteAr": "بنحفظ نسخة من الإعلان زي ما وصل، قبل أي تعديل."
         },
         {
           "id": "processing",
@@ -41,7 +44,8 @@
           "category": "blue",
           "x": 855,
           "y": 0,
-          "notes": "Preserve original text, normalize country/title separately, adopt source ID, then exact independently verified identity. Treat weak cross-source matches as review candidates."
+          "notes": "Preserve original text, normalize country/title separately, adopt source ID, then exact independently verified identity. Treat weak cross-source matches as review candidates.",
+          "noteAr": "بنراجع البيانات وننضّفها ونوحّد شكلها ونمنع التكرار."
         },
         {
           "id": "storage",
@@ -51,7 +55,8 @@
           "category": "blue",
           "x": 1140,
           "y": 0,
-          "notes": "Use UUID job PK, source-level uniqueness, immutable description hash, active result selection, indexes for filters and backup/restore."
+          "notes": "Use UUID job PK, source-level uniqueness, immutable description hash, active result selection, indexes for filters and backup/restore.",
+          "noteAr": "بنخزّن الوظائف والمهارات في قاعدة واحدة ونربطها بمصادرها."
         },
         {
           "id": "nlp",
@@ -61,7 +66,8 @@
           "category": "purple",
           "x": 855,
           "y": 255,
-          "notes": "Keep offsets in original text using a match-to-original map. Disambiguate short aliases. Store unmatched as candidates; publish results atomically by version."
+          "notes": "Keep offsets in original text using a match-to-original map. Disambiguate short aliases. Store unmatched as candidates; publish results atomically by version.",
+          "noteAr": "بنستخرج المهارات من الوصف ونوحّد أسماءها."
         },
         {
           "id": "analytics",
@@ -71,7 +77,8 @@
           "category": "purple",
           "x": 855,
           "y": 510,
-          "notes": "Filter once by [from,to), count distinct jobs per skill, report eligible and enriched counts. Trends compare equal windows and source composition."
+          "notes": "Filter once by [from,to), count distinct jobs per skill, report eligible and enriched counts. Trends compare equal windows and source composition.",
+          "noteAr": "بنحسب الطلب على المهارات حسب البلد والدور والفترة."
         },
         {
           "id": "backend",
@@ -81,7 +88,8 @@
           "category": "teal",
           "x": 570,
           "y": 255,
-          "notes": "Describe endpoints via OpenAPI. Use stable cursor ordered by date and UUID, bounded page size, request ID and parameterized SQL."
+          "notes": "Describe endpoints via OpenAPI. Use stable cursor ordered by date and UUID, bounded page size, request ID and parameterized SQL.",
+          "noteAr": "بنستقبل طلبات الواجهة ونرجّع بيانات الوظائف والتحليلات."
         },
         {
           "id": "frontend",
@@ -91,7 +99,8 @@
           "category": "teal",
           "x": 285,
           "y": 255,
-          "notes": "Keep shared query state, abort outdated requests, display sample size and basis, test loading/empty/error and keyboard access."
+          "notes": "Keep shared query state, abort outdated requests, display sample size and basis, test loading/empty/error and keyboard access.",
+          "noteAr": "بنعرض النتائج في لوحة فيها فلاتر للبلد والدور والتاريخ."
         },
         {
           "id": "operations",
@@ -101,7 +110,8 @@
           "category": "amber",
           "x": 0,
           "y": 255,
-          "notes": "Unit tests on each PR, integration with disposable PostgreSQL, smoke and restore on clean machine. Record run IDs, durations and safe error classes."
+          "notes": "Unit tests on each PR, integration with disposable PostgreSQL, smoke and restore on clean machine. Record run IDs, durations and safe error classes.",
+          "noteAr": "بنتابع التشغيل والاختبارات والنسخ الاحتياطي والاسترجاع."
         }
       ],
       "edges": [
@@ -216,7 +226,8 @@
           "category": "gray",
           "x": 0,
           "y": 0,
-          "notes": "Inputs: Candidate notes for LinkedIn, Wuzzuf, Bayt, JSearch API and backup provider\nOutputs: Approved source capability record or explicit no-go"
+          "notes": "Inputs: Candidate notes for LinkedIn, Wuzzuf, Bayt, JSearch API and backup provider\nOutputs: Approved source capability record or explicit no-go",
+          "noteAr": "بنراجع إذن الاستخدام والتغطية والتكلفة قبل اعتماد المصدر."
         },
         {
           "id": "sources-2",
@@ -226,7 +237,8 @@
           "category": "gray",
           "x": 295,
           "y": 0,
-          "notes": "Inputs: Approved capability record and credential variable names\nOutputs: Adapter registration and conformance fixture"
+          "notes": "Inputs: Approved capability record and credential variable names\nOutputs: Adapter registration and conformance fixture",
+          "noteAr": "بنسجّل موصّل لكل مصدر عشان نجمع منه بنفس طريقة النظام."
         },
         {
           "id": "sources-3",
@@ -236,7 +248,8 @@
           "category": "gray",
           "x": 590,
           "y": 0,
-          "notes": "Inputs: Run ledger, response codes and observed countries\nOutputs: Source health note and escalation decision"
+          "notes": "Inputs: Run ledger, response codes and observed countries\nOutputs: Source health note and escalation decision",
+          "noteAr": "بنتابع حدود الاستخدام والأعطال وتغطية الوظائف في كل بلد."
         }
       ],
       "edges": [
@@ -270,7 +283,8 @@
           "category": "blue",
           "x": 0,
           "y": 0,
-          "notes": "Inputs: Capability record and requested window\nOutputs: Validated run configuration"
+          "notes": "Inputs: Capability record and requested window\nOutputs: Validated run configuration",
+          "noteAr": "بنختار المصدر والبلد والدور وحدود دفعة الجمع."
         },
         {
           "id": "ingestion-2",
@@ -280,7 +294,8 @@
           "category": "blue",
           "x": 295,
           "y": 0,
-          "notes": "Inputs: Run configuration and adapter registry\nOutputs: Provider request plan without secrets in logs"
+          "notes": "Inputs: Run configuration and adapter registry\nOutputs: Provider request plan without secrets in logs",
+          "noteAr": "بنحوّل طلب الجمع لصيغة يفهمها المصدر."
         },
         {
           "id": "ingestion-3",
@@ -290,7 +305,8 @@
           "category": "blue",
           "x": 590,
           "y": 0,
-          "notes": "Inputs: Provider request and injected credential\nOutputs: Provider response and remote run identifier"
+          "notes": "Inputs: Provider request and injected credential\nOutputs: Provider response and remote run identifier",
+          "noteAr": "بنشغّل طلب الجمع بحدود وقت وميزانية واضحة."
         },
         {
           "id": "ingestion-4",
@@ -300,7 +316,8 @@
           "category": "blue",
           "x": 885,
           "y": 0,
-          "notes": "Inputs: Provider response page and durable page token\nOutputs: Validated records and cursor candidate"
+          "notes": "Inputs: Provider response page and durable page token\nOutputs: Validated records and cursor candidate",
+          "noteAr": "بنكمل من آخر صفحة محفوظة ونكرر المحاولة لو العطل مؤقت."
         },
         {
           "id": "ingestion-5",
@@ -310,7 +327,8 @@
           "category": "blue",
           "x": 885,
           "y": 205,
-          "notes": "Inputs: Original provider bytes and run UUID\nOutputs: Raw archive reference and checksum"
+          "notes": "Inputs: Original provider bytes and run UUID\nOutputs: Raw archive reference and checksum",
+          "noteAr": "بنحفظ الصفحة الأصلية قبل ما ننتقل للصفحة اللي بعدها."
         },
         {
           "id": "ingestion-6",
@@ -320,7 +338,8 @@
           "category": "blue",
           "x": 590,
           "y": 205,
-          "notes": "Inputs: Manifest, checksums and response metadata\nOutputs: Run ledger and counters"
+          "notes": "Inputs: Manifest, checksums and response metadata\nOutputs: Run ledger and counters",
+          "noteAr": "بنسجّل المصدر ووقت الجمع وعدد الصفحات ونقطة الاستئناف."
         },
         {
           "id": "ingestion-7",
@@ -330,7 +349,8 @@
           "category": "blue",
           "x": 295,
           "y": 205,
-          "notes": "Inputs: Ledger and safe error class\nOutputs: Terminal status with replay or escalation decision"
+          "notes": "Inputs: Ledger and safe error class\nOutputs: Terminal status with replay or escalation decision",
+          "noteAr": "بنحدد الدفعة خلصت بالكامل أو جزئيًا أو فشلت."
         }
       ],
       "edges": [
@@ -400,7 +420,8 @@
           "category": "blue",
           "x": 0,
           "y": 0,
-          "notes": "Inputs: Provider payload and metadata\nOutputs: Accepted versioned envelope or rejection"
+          "notes": "Inputs: Provider payload and metadata\nOutputs: Accepted versioned envelope or rejection",
+          "noteAr": "بنتأكد إن السجل تابع للمصدر والدفعة الصح."
         },
         {
           "id": "raw-2",
@@ -410,7 +431,8 @@
           "category": "blue",
           "x": 295,
           "y": 0,
-          "notes": "Inputs: RawEnvelope and provider bytes\nOutputs: Archive path and SHA-256"
+          "notes": "Inputs: RawEnvelope and provider bytes\nOutputs: Archive path and SHA-256",
+          "noteAr": "بنحفظ البيانات الأصلية في أرشيف من غير تعديل."
         },
         {
           "id": "raw-3",
@@ -420,7 +442,8 @@
           "category": "blue",
           "x": 590,
           "y": 0,
-          "notes": "Inputs: Archive reference, source ID and timestamp\nOutputs: Manifest row and durable cursor boundary"
+          "notes": "Inputs: Archive reference, source ID and timestamp\nOutputs: Manifest row and durable cursor boundary",
+          "noteAr": "بنسجّل مكان النسخة وبصمتها عشان نتأكد إنها سليمة."
         },
         {
           "id": "raw-4",
@@ -430,7 +453,8 @@
           "category": "blue",
           "x": 885,
           "y": 0,
-          "notes": "Inputs: Run ID, archive location and checksum\nOutputs: Ordered raw records for reprocessing"
+          "notes": "Inputs: Run ID, archive location and checksum\nOutputs: Ordered raw records for reprocessing",
+          "noteAr": "بنرجع لنسخة محفوظة عشان نعيد معالجتها عند الحاجة."
         }
       ],
       "edges": [
@@ -473,7 +497,8 @@
           "category": "blue",
           "x": 0,
           "y": 0,
-          "notes": "Inputs: RawEnvelope v1 and archive bytes\nOutputs: Raw payload plus provenance metadata"
+          "notes": "Inputs: RawEnvelope v1 and archive bytes\nOutputs: Raw payload plus provenance metadata",
+          "noteAr": "بنقرأ الإعلان الأصلي ونحتفظ بمرجع النسخة المحفوظة."
         },
         {
           "id": "processing-2",
@@ -483,7 +508,8 @@
           "category": "blue",
           "x": 295,
           "y": 0,
-          "notes": "Inputs: Raw record and source field map\nOutputs: Accepted field map or safe rejection reason"
+          "notes": "Inputs: Raw record and source field map\nOutputs: Accepted field map or safe rejection reason",
+          "noteAr": "بنراجع الحقول المطلوبة ونعزل السجلات اللي فيها مشكلة."
         },
         {
           "id": "processing-3",
@@ -493,7 +519,8 @@
           "category": "blue",
           "x": 590,
           "y": 0,
-          "notes": "Inputs: Validated values and locale rules\nOutputs: Cleaned fields with quality flags"
+          "notes": "Inputs: Validated values and locale rules\nOutputs: Cleaned fields with quality flags",
+          "noteAr": "بننضّف الحقول المعروضة ونحتفظ بالوصف الأصلي."
         },
         {
           "id": "processing-4",
@@ -503,7 +530,8 @@
           "category": "blue",
           "x": 885,
           "y": 0,
-          "notes": "Inputs: Source IDs and cleaned entity attributes\nOutputs: Stable canonical key or review candidate"
+          "notes": "Inputs: Source IDs and cleaned entity attributes\nOutputs: Stable canonical key or review candidate",
+          "noteAr": "بنتحقق من التكرار قبل دمج إعلانين لنفس الوظيفة."
         },
         {
           "id": "processing-5",
@@ -513,7 +541,8 @@
           "category": "blue",
           "x": 885,
           "y": 205,
-          "notes": "Inputs: Cleaned fields, provenance and job identity\nOutputs: CanonicalJob v1"
+          "notes": "Inputs: Cleaned fields, provenance and job identity\nOutputs: CanonicalJob v1",
+          "noteAr": "بنوحّد البلد والدور والتواريخ في شكل واحد."
         },
         {
           "id": "processing-6",
@@ -523,7 +552,8 @@
           "category": "blue",
           "x": 590,
           "y": 205,
-          "notes": "Inputs: CanonicalJob and raw refs\nOutputs: Committed UUID and replay reconciliation evidence"
+          "notes": "Inputs: CanonicalJob and raw refs\nOutputs: Committed UUID and replay reconciliation evidence",
+          "noteAr": "بنحفظ الوظيفة وروابط مصادرها بحيث إعادة التشغيل ما تكررش البيانات."
         }
       ],
       "edges": [
@@ -584,7 +614,8 @@
           "category": "blue",
           "x": 0,
           "y": 0,
-          "notes": "Inputs: Pinned migration history and schema version\nOutputs: Ready v1 relational schema"
+          "notes": "Inputs: Pinned migration history and schema version\nOutputs: Ready v1 relational schema",
+          "noteAr": "بنطبّق تغييرات قاعدة البيانات ونختبر التحديث والرجوع."
         },
         {
           "id": "storage-2",
@@ -594,7 +625,8 @@
           "category": "blue",
           "x": 295,
           "y": 0,
-          "notes": "Inputs: CanonicalJob v1 and raw refs\nOutputs: Stable job ID and source association"
+          "notes": "Inputs: CanonicalJob v1 and raw refs\nOutputs: Stable job ID and source association",
+          "noteAr": "بننشئ أو نحدّث سجل الوظيفة بمعرّف ثابت ونربطه بمصادره."
         },
         {
           "id": "storage-3",
@@ -604,7 +636,8 @@
           "category": "blue",
           "x": 590,
           "y": 0,
-          "notes": "Inputs: Job ID and collection metadata\nOutputs: Source, run ID, raw checksum and evidence flags"
+          "notes": "Inputs: Job ID and collection metadata\nOutputs: Source, run ID, raw checksum and evidence flags",
+          "noteAr": "بنتتبّع أي وظيفة أو نتيجة تحليل لحد سجلات المصدر."
         },
         {
           "id": "storage-4",
@@ -614,7 +647,8 @@
           "category": "blue",
           "x": 885,
           "y": 0,
-          "notes": "Inputs: Enrichment v1 and descriptor hash\nOutputs: Reporting view with active job-skill relationships"
+          "notes": "Inputs: Enrichment v1 and descriptor hash\nOutputs: Reporting view with active job-skill relationships",
+          "noteAr": "بنستخدم الإصدار المعتمد للمهارات ونحتفظ بالإصدارات السابقة."
         }
       ],
       "edges": [
@@ -657,7 +691,8 @@
           "category": "purple",
           "x": 0,
           "y": 0,
-          "notes": "Inputs: CanonicalJob v1\nOutputs: Eligible description and traceable job identity"
+          "notes": "Inputs: CanonicalJob v1\nOutputs: Eligible description and traceable job identity",
+          "noteAr": "بنجيب الوصف الأصلي للوظيفة من السجل الموحّد."
         },
         {
           "id": "nlp-2",
@@ -667,7 +702,8 @@
           "category": "purple",
           "x": 295,
           "y": 0,
-          "notes": "Inputs: Versioned description text and dictionaries\nOutputs: Candidate mentions and code-point offsets"
+          "notes": "Inputs: Versioned description text and dictionaries\nOutputs: Candidate mentions and code-point offsets",
+          "noteAr": "بندور على المهارات في النص ونحتفظ بمكان ظهورها."
         },
         {
           "id": "nlp-3",
@@ -677,7 +713,8 @@
           "category": "purple",
           "x": 590,
           "y": 0,
-          "notes": "Inputs: Candidate aliases, language and offsets\nOutputs: Normalized alias candidates with ambiguity flags"
+          "notes": "Inputs: Candidate aliases, language and offsets\nOutputs: Normalized alias candidates with ambiguity flags",
+          "noteAr": "بنوحّد كتابة المهارة ونحتفظ بالنص اللي ظهرت فيه."
         },
         {
           "id": "nlp-4",
@@ -687,7 +724,8 @@
           "category": "purple",
           "x": 885,
           "y": 0,
-          "notes": "Inputs: Normalized alias and pinned version\nOutputs: Versioned skill IDs or review candidates"
+          "notes": "Inputs: Normalized alias and pinned version\nOutputs: Versioned skill IDs or review candidates",
+          "noteAr": "بنربط الاسم الموحّد بقاموس المهارات ونراجع الأسماء الملتبسة."
         },
         {
           "id": "nlp-5",
@@ -697,7 +735,8 @@
           "category": "purple",
           "x": 885,
           "y": 205,
-          "notes": "Inputs: Job UUID, skill IDs and evidenced mentions\nOutputs: Versioned Enrichment payload"
+          "notes": "Inputs: Job UUID, skill IDs and evidenced mentions\nOutputs: Versioned Enrichment payload",
+          "noteAr": "بنربط كل مهارة بالوظيفة مرة واحدة ونحتفظ بأماكن ظهورها."
         },
         {
           "id": "nlp-6",
@@ -707,7 +746,8 @@
           "category": "purple",
           "x": 590,
           "y": 205,
-          "notes": "Inputs: Enrichment payload and original description hash\nOutputs: New immutable enrichment run and active job links"
+          "notes": "Inputs: Enrichment payload and original description hash\nOutputs: New immutable enrichment run and active job links",
+          "noteAr": "بنحفظ نتيجة الاستخراج في قاعدة البيانات بإصدار واضح."
         },
         {
           "id": "nlp-7",
@@ -717,7 +757,8 @@
           "category": "purple",
           "x": 295,
           "y": 205,
-          "notes": "Inputs: Blind gold, splits and model/taxonomy metadata\nOutputs: Precision, recall, F1, failures and normalization accuracy"
+          "notes": "Inputs: Blind gold, splits and model/taxonomy metadata\nOutputs: Precision, recall, F1, failures and normalization accuracy",
+          "noteAr": "بنقارن الاستخراج بعينة اتقيّمت مستقل ونحسب الأداء والأخطاء."
         }
       ],
       "edges": [
@@ -787,7 +828,8 @@
           "category": "purple",
           "x": 0,
           "y": 0,
-          "notes": "Inputs: Jobs, job_skills and provenance views\nOutputs: Eligible rows with date basis and version"
+          "notes": "Inputs: Jobs, job_skills and provenance views\nOutputs: Eligible rows with date basis and version",
+          "noteAr": "بنقرأ الوظائف المقبولة والمهارات من الإصدار المعتمد."
         },
         {
           "id": "analytics-2",
@@ -797,7 +839,8 @@
           "category": "purple",
           "x": 295,
           "y": 0,
-          "notes": "Inputs: Curated records and normalized filter values\nOutputs: Eligible cohort including unenriched jobs"
+          "notes": "Inputs: Curated records and normalized filter values\nOutputs: Eligible cohort including unenriched jobs",
+          "noteAr": "بنختار الوظائف حسب البلد والدور والفترة المطلوبة."
         },
         {
           "id": "analytics-3",
@@ -807,7 +850,8 @@
           "category": "purple",
           "x": 590,
           "y": 0,
-          "notes": "Inputs: Eligible filtered job rows and enrichment joins\nOutputs: Skill counts, enrichment and date coverage"
+          "notes": "Inputs: Eligible filtered job rows and enrichment joins\nOutputs: Skill counts, enrichment and date coverage",
+          "noteAr": "بنحسب عدد الوظائف المميزة اللي ذكرت كل مهارة."
         },
         {
           "id": "analytics-4",
@@ -817,7 +861,8 @@
           "category": "purple",
           "x": 885,
           "y": 0,
-          "notes": "Inputs: Comparable time windows and source mix\nOutputs: Trend points or insufficient-data state"
+          "notes": "Inputs: Comparable time windows and source mix\nOutputs: Trend points or insufficient-data state",
+          "noteAr": "بنقارن فترات متساوية لما تغطية البيانات تسمح."
         },
         {
           "id": "analytics-5",
@@ -827,7 +872,8 @@
           "category": "purple",
           "x": 885,
           "y": 205,
-          "notes": "Inputs: Cohort, aggregate values and coverage policy\nOutputs: Typed reporting object and visible provenance notes"
+          "notes": "Inputs: Cohort, aggregate values and coverage policy\nOutputs: Typed reporting object and visible provenance notes",
+          "noteAr": "بنجمع حساب المؤشرات في خدمة واحدة قابلة لإعادة الاستخدام."
         },
         {
           "id": "analytics-6",
@@ -837,7 +883,8 @@
           "category": "purple",
           "x": 590,
           "y": 205,
-          "notes": "Inputs: Service object and canonical filters\nOutputs: SkillDemand v1 or Error v1"
+          "notes": "Inputs: Service object and canonical filters\nOutputs: SkillDemand v1 or Error v1",
+          "noteAr": "بنرجّع الأعداد ومعلومات التغطية بصيغة ثابتة للواجهة."
         }
       ],
       "edges": [
@@ -898,7 +945,8 @@
           "category": "teal",
           "x": 0,
           "y": 0,
-          "notes": "Inputs: Role, country, date basis, range and cursor\nOutputs: Validated request or safe error"
+          "notes": "Inputs: Role, country, date basis, range and cursor\nOutputs: Validated request or safe error",
+          "noteAr": "بنستقبل فلاتر المستخدم من لوحة البيانات."
         },
         {
           "id": "backend-2",
@@ -908,7 +956,8 @@
           "category": "teal",
           "x": 295,
           "y": 0,
-          "notes": "Inputs: Incoming HTTP parameters\nOutputs: Typed filters or 422 Error v1"
+          "notes": "Inputs: Incoming HTTP parameters\nOutputs: Typed filters or 422 Error v1",
+          "noteAr": "بنتأكد إن قيم الفلاتر وحدود الطلب والتواريخ سليمة."
         },
         {
           "id": "backend-3",
@@ -918,7 +967,8 @@
           "category": "teal",
           "x": 590,
           "y": 0,
-          "notes": "Inputs: Validated request and data services\nOutputs: Result paired with request context"
+          "notes": "Inputs: Validated request and data services\nOutputs: Result paired with request context",
+          "noteAr": "بنوصل الطلب لخدمة الوظائف أو التحليلات حسب المطلوب."
         },
         {
           "id": "backend-4",
@@ -928,7 +978,8 @@
           "category": "teal",
           "x": 885,
           "y": 0,
-          "notes": "Inputs: Typed request, stable cursor and repository\nOutputs: Rows, coverage and cursor metadata"
+          "notes": "Inputs: Typed request, stable cursor and repository\nOutputs: Rows, coverage and cursor metadata",
+          "noteAr": "بنشغّل الاستعلام على البيانات أو بنطلب المؤشر من خدمة التحليلات."
         },
         {
           "id": "backend-5",
@@ -938,7 +989,8 @@
           "category": "teal",
           "x": 885,
           "y": 205,
-          "notes": "Inputs: Query result or categorized failure\nOutputs: 200 response, 422 bad input or 503 dependency error"
+          "notes": "Inputs: Query result or categorized failure\nOutputs: 200 response, 422 bad input or 503 dependency error",
+          "noteAr": "بنرجّع النتيجة أو رسالة خطأ واضحة مع معرّف الطلب."
         }
       ],
       "edges": [
@@ -990,7 +1042,8 @@
           "category": "teal",
           "x": 0,
           "y": 0,
-          "notes": "Inputs: User selections and supported values\nOutputs: Canonical dashboard query"
+          "notes": "Inputs: User selections and supported values\nOutputs: Canonical dashboard query",
+          "noteAr": "بنخلي المستخدم يختار البلد والدور والفترة اللي عايز يشوفها."
         },
         {
           "id": "frontend-2",
@@ -1000,7 +1053,8 @@
           "category": "teal",
           "x": 295,
           "y": 0,
-          "notes": "Inputs: Filter state and OpenAPI/fixture contract\nOutputs: Current metrics response or visible failure"
+          "notes": "Inputs: Filter state and OpenAPI/fixture contract\nOutputs: Current metrics response or visible failure",
+          "noteAr": "بنبعت الفلاتر للـAPI ونلغي الطلب القديم لو الاختيار اتغيّر."
         },
         {
           "id": "frontend-3",
@@ -1010,7 +1064,8 @@
           "category": "teal",
           "x": 590,
           "y": 0,
-          "notes": "Inputs: SkillDemand v1 payload\nOutputs: Connected chart or ranked table and provenance hint"
+          "notes": "Inputs: SkillDemand v1 payload\nOutputs: Connected chart or ranked table and provenance hint",
+          "noteAr": "بنعرض ترتيب المهارات ونوضح حجم العينة وأساس التاريخ."
         },
         {
           "id": "frontend-4",
@@ -1020,7 +1075,8 @@
           "category": "teal",
           "x": 885,
           "y": 0,
-          "notes": "Inputs: API client state\nOutputs: Accessible feedback and bounded retry action"
+          "notes": "Inputs: API client state\nOutputs: Accessible feedback and bounded retry action",
+          "noteAr": "بنوضح لو الصفحة بتحمّل أو مفيش نتائج أو حصل خطأ."
         }
       ],
       "edges": [
@@ -1063,7 +1119,8 @@
           "category": "amber",
           "x": 0,
           "y": 0,
-          "notes": "Inputs: Versioned change and pinned environment\nOutputs: Reviewable test report and release gate status"
+          "notes": "Inputs: Versioned change and pinned environment\nOutputs: Reviewable test report and release gate status",
+          "noteAr": "بنشغّل اختبارات الكود وقاعدة البيانات قبل اعتماد التغييرات."
         },
         {
           "id": "operations-2",
@@ -1073,7 +1130,8 @@
           "category": "amber",
           "x": 295,
           "y": 0,
-          "notes": "Inputs: Approved run configuration and schedule\nOutputs: Run ID, checkpoint and terminal status"
+          "notes": "Inputs: Approved run configuration and schedule\nOutputs: Run ID, checkpoint and terminal status",
+          "noteAr": "بنجدول الجمع والمعالجة ونمنع تداخل التشغيلات."
         },
         {
           "id": "operations-3",
@@ -1083,7 +1141,8 @@
           "category": "amber",
           "x": 590,
           "y": 0,
-          "notes": "Inputs: Service checks and job ledgers\nOutputs: Probe result, duration, run ID and safe error class"
+          "notes": "Inputs: Service checks and job ledgers\nOutputs: Probe result, duration, run ID and safe error class",
+          "noteAr": "بنتابع حالة الخدمات وسجلات التشغيل من غير نشر بيانات حساسة."
         },
         {
           "id": "operations-4",
@@ -1093,7 +1152,8 @@
           "category": "amber",
           "x": 885,
           "y": 0,
-          "notes": "Inputs: Pinned Compose profile, permitted data and release manifest\nOutputs: Verified clean boot and rollback instructions"
+          "notes": "Inputs: Pinned Compose profile, permitted data and release manifest\nOutputs: Verified clean boot and rollback instructions",
+          "noteAr": "بنختبر الاسترجاع وبنجهّز نسخة إصدار قابلة للتشغيل."
         }
       ],
       "edges": [

@@ -40,7 +40,8 @@ export function validateArchitecture(input) {
       if (nodeIds.has(id)) fail('Component IDs must be unique within a diagram.');
       nodeIds.add(id);
       return { id, label: note(n.label, 90), summary: note(n.summary, 200), technology: note(n.technology, 80),
-        category: choice(n.category, CATEGORIES), x: coord(n.x), y: coord(n.y), notes: note(n.notes, 3000) };
+        category: choice(n.category, CATEGORIES), x: coord(n.x), y: coord(n.y), notes: note(n.notes, 3000),
+        ...(n.noteAr !== undefined ? { noteAr: note(n.noteAr, 180) } : {}) };
     });
     const edges = graph.edges.map(e => {
       const id = identifier(e?.id, 'connection');
@@ -48,7 +49,8 @@ export function validateArchitecture(input) {
       if (!nodeIds.has(e.source) || !nodeIds.has(e.target) || e.source === e.target) fail('A connection points to an invalid component.');
       edgeIds.add(id);
       return { id, source: e.source, target: e.target, label: note(e.label, 90), kind: choice(e.kind, EDGE_KINDS),
-        sourcePort: choice(e.sourcePort, PORTS), targetPort: choice(e.targetPort, PORTS) };
+        sourcePort: choice(e.sourcePort, PORTS), targetPort: choice(e.targetPort, PORTS),
+        ...(e.bend ? { bend: { x: coord(e.bend.x), y: coord(e.bend.y) } } : {}) };
     });
     return [key, { nodes, edges }];
   }));

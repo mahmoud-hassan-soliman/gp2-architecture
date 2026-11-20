@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Background, BackgroundVariant, ConnectionMode, Controls, Handle, MarkerType, Position, ReactFlow, useReactFlow } from '@xyflow/react';
-import { ArrowDownToLine, ArrowUpFromLine, ChevronRight, CircuitBoard, GitFork, Layers3, Maximize, Network, PenLine, Plus, RotateCcw, X } from 'lucide-react';
+import { ArrowDownToLine, ArrowUpFromLine, ChevronRight, CircuitBoard, GitFork, Hand, Layers3, Maximize, MousePointer2, Network, PenLine, Plus, RotateCcw, X } from 'lucide-react';
 import '@xyflow/react/dist/style.css';
 import './style.css';
 import initial from './architecture.json';
 import { Tasks } from './Tasks.jsx';
+import { ConnectionEdge } from './Connection.jsx';
 import { canConnect, CATEGORIES, changeGraph, deleteSelection, EDGE_KINDS, PORTS, ROOT, updateItem, validateArchitecture } from './model.js';
 
 const STORAGE = 'gp2-architecture-draft-v2';
@@ -17,6 +18,8 @@ const TECH = { postgresql: 'postgresql', postgres: 'postgresql', python: 'python
 const ASSETS = import.meta.env.BASE_URL;
 const uid = prefix => `${prefix}-${crypto.randomUUID()}`;
 const seeded = validateArchitecture(initial);
+const arabicNotes = new Map(Object.values(seeded.graphs).flatMap(graph => graph.nodes.map(node => [node.id, node.noteAr])));
+const arabicNote = node => node.noteAr ?? arabicNotes.get(node.id) ?? '';
 
 function loadDraft() {
   try {
@@ -29,6 +32,7 @@ function NodeCard({ data, selected }) {
   const mark = TECH[data.technology.trim().toLowerCase()];
   return (
     <div className={`node-card ${data.category} ${selected ? 'selected' : ''}`}>
+      {arabicNote(data) && <span className="node-note" lang="ar" dir="rtl">{arabicNote(data)}</span>}
       {PORTS.map(port => <Handle key={port} type="source" id={port} position={PORT_POSITIONS[port]} isConnectable={data.editing} />)}
       <span className="node-category"><span />{CATEGORY_LABELS[data.category]}</span>
       <strong>{data.label || 'Untitled component'}</strong>
@@ -42,8 +46,9 @@ function NodeCard({ data, selected }) {
 }
 
 const nodeTypes = { card: NodeCard };
+const edgeTypes = { draggableConnection: ConnectionEdge };
 
-function Diagram({ graph, selection, editing, select, move, connect, reconnect, openDetails, scope }) {
+function Diagram({ graph, selection, editing, panning, select, move, saveBend, connect, reconnect, openDetails, scope }) {
   const movedDuringDrag = useRef({});
   const [positions, setPositions] = useState({});
   const validConnection = useCallback(connection => canConnect(graph, connection), [graph]);
@@ -54,18 +59,19 @@ function Diagram({ graph, selection, editing, select, move, connect, reconnect, 
   })), [graph.nodes, positions, editing, selection]);
   const edges = useMemo(() => graph.edges.map(edge => ({
     id: edge.id, source: edge.source, target: edge.target, sourceHandle: edge.sourcePort, targetHandle: edge.targetPort,
-    label: edge.label, className: 'nopan', type: 'smoothstep', pathOptions: { offset: edge.kind === 'enrichment' ? 43 : 19 }, selected: selection?.type === 'edge' && edge.id === selection.id,
+    label: edge.label, className: 'nopan', type: 'draggableConnection', data: { bend: edge.bend, saveBend, select, panning }, pathOptions: { offset: edge.kind === 'enrichment' ? 43 : 19 }, selected: selection?.type === 'edge' && edge.id === selection.id,
     style: { stroke: EDGE_COLORS[edge.kind], strokeWidth: selection?.id === edge.id ? 3 : 1.7, strokeDasharray: edge.kind === 'control' ? '7 5' : undefined },
     markerEnd: { type: MarkerType.ArrowClosed, color: EDGE_COLORS[edge.kind], width: 19, height: 19 },
     labelStyle: { fill: '#c6d8e8', fontSize: 11 },
     labelBgStyle: { fill: '#101c2d', fillOpacity: .96 }, labelBgPadding: [5, 4], labelBgBorderRadius: 4,
     ariaLabel: edge.label || 'Unlabelled connection'
-  })), [graph.edges, selection]);
+  })), [graph.edges, selection, panning, select, saveBend]);
   return (
-    <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes}
-      colorMode="dark" connectionMode={ConnectionMode.Loose} nodesDraggable nodesConnectable={editing} autoPanOnNodeDrag={false} autoPanOnConnect={false}
-      edgesReconnectable={editing} deleteKeyCode={null} multiSelectionKeyCode={null}
-      selectionKeyCode={null} minZoom={0.16} maxZoom={2.5} fitView fitViewOptions={{ padding: '8%', maxZoom: scope === ROOT ? .95 : 1.12 }}
+    <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes}
+      colorMode="dark" connectionMode={ConnectionMode.Loose} nodesDraggable={!panning} nodesConnectable={editing && !panning} autoPanOnNodeDrag={false} autoPanOnConnect={false}
+      panOnDrag={panning ? true : [1]} panActivationKeyCode={null}
+      edgesReconnectable={editing && !panning} deleteKeyCode={null} multiSelectionKeyCode={null}
+      selectionKeyCode={null} minZoom={0.16} maxZoom={2.5} fitView fitViewOptions={{ padding: { top: '19%', bottom: '8%', x: '8%' }, maxZoom: scope === ROOT ? .95 : 1.12 }}
       isValidConnection={validConnection}
       onNodesChange={changes => {
         const positionChanges = changes.getByType('position').filter(c => c.position);
@@ -97,7 +103,7 @@ function Diagram({ graph, selection, editing, select, move, connect, reconnect, 
 
 function FitButton() {
   const { fitView } = useReactFlow();
-  return <button className="fit-button" onClick={() => fitView({ padding: '8%', duration: 180 })}><Maximize size={15} /> Fit diagram</button>;
+  return <button className="fit-button" onClick={() => fitView({ padding: { top: '19%', bottom: '8%', x: '8%' }, duration: 180 })}><Maximize size={15} /> Fit diagram</button>;
 }
 
 function Inspector({ item, selection, editing, patch, remove, graph, details, openDetails, close }) {
@@ -120,8 +126,10 @@ function Inspector({ item, selection, editing, patch, remove, graph, details, op
         <datalist id="technologies">{['PostgreSQL', 'Python', 'FastAPI', 'React', 'Docker', 'Docker Compose', 'GitHub Actions', 'LinkedIn'].map(name => <option key={name} value={name} />)}</datalist>
         <label>Category<select value={item.category} onChange={e => patch({ category: e.target.value })}>{CATEGORIES.map(c => <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>)}</select></label>
         <label>Summary<textarea rows={2} value={item.summary} maxLength={200} onChange={e => patch({ summary: e.target.value })} /></label>
+        <label>Arabic note<textarea rows={2} lang="ar" dir="rtl" value={arabicNote(item)} maxLength={180} onChange={e => patch({ noteAr: e.target.value })} /></label>
         <label>Details<textarea rows={4} value={item.notes} maxLength={3000} onChange={e => patch({ notes: e.target.value })} /></label>
       </> : <>
+        {item.bend && <button onClick={() => patch({ bend: undefined })}>Reset connection route</button>}
         <label>Flow type<select value={item.kind} onChange={e => patch({ kind: e.target.value })}>{EDGE_KINDS.map(k => <option key={k}>{k}</option>)}</select></label>
         <label>From<select value={item.source} onChange={e => patch({ source: e.target.value })}>{graph.nodes.filter(n => n.id !== item.target).map(n => <option key={n.id} value={n.id}>{n.label}</option>)}</select></label>
         <label>To<select value={item.target} onChange={e => patch({ target: e.target.value })}>{graph.nodes.filter(n => n.id !== item.source).map(n => <option key={n.id} value={n.id}>{n.label}</option>)}</select></label>
@@ -129,6 +137,7 @@ function Inspector({ item, selection, editing, patch, remove, graph, details, op
       <button className="danger" onClick={remove}>Delete {isNode ? 'component' : 'connection'}</button>
     </div> : isNode ? <>
       {item.technology && <span className="technology"><CircuitBoard size={15} /> {item.technology}</span>}
+      {arabicNote(item) && <p className="inspector-note" lang="ar" dir="rtl">{arabicNote(item)}</p>}
       <p>{item.summary}</p>{item.notes && <p className="notes">{item.notes}</p>}
     </> : <p className="technology">{item.kind} flow</p>}
     {isNode && details && <button className="open-layer" onClick={openDetails}><Layers3 size={16} /> Open layer diagram <ChevronRight size={16} /></button>}
@@ -139,6 +148,7 @@ function App() {
   const [doc, setDoc] = useState(loadDraft);
   const [page, setPage] = useState(() => location.hash === '#architecture' ? 'architecture' : 'home');
   const [editing, setEditing] = useState(false);
+  const [panning, setPanning] = useState(false);
   const [scope, setScope] = useState(ROOT);
   const [selection, setSelection] = useState(null);
   const [status, setStatus] = useState('');
@@ -171,7 +181,7 @@ function App() {
 
   function go(next, nextSelection = null) {
     if (!doc.graphs[next]) return;
-    setScope(next); setSelection(nextSelection); setSearch('');
+    setScope(next); setSelection(nextSelection); setSearch(''); setPanning(false);
   }
 
   function addComponent() {
@@ -245,7 +255,7 @@ function App() {
         <button className="secondary" onClick={() => file.current?.click()}><ArrowUpFromLine size={16} /> Import JSON</button>
         <input type="file" ref={file} accept=".json,application/json" onChange={importDraft} hidden />
         <button className="secondary" onClick={exportDraft}><ArrowDownToLine size={16} /> Export JSON</button>
-        <button className={editing ? 'secondary editing' : 'primary'} onClick={() => { setEditing(!editing); setStatus(''); }} aria-pressed={editing}><PenLine size={16} />{editing ? 'Done editing' : 'Edit diagram'}</button>
+        <button className={editing ? 'secondary editing' : 'primary'} onClick={() => { setEditing(!editing); setPanning(false); setStatus(''); }} aria-pressed={editing}><PenLine size={16} />{editing ? 'Done editing' : 'Edit diagram'}</button>
       </div>}
     </header>
     {page === 'home' ? <Tasks openArchitecture={() => switchPage('architecture')} /> : <main>
@@ -264,13 +274,17 @@ function App() {
             {layerNames.map(node => <button className={`layer-button ${scope === node.id ? 'current' : ''}`} key={node.id} onClick={() => go(node.id)}><span className={`layer-dot ${node.category}`} /> {node.label}</button>)}
           </div>}
         </aside>
-        <section className={`canvas ${editing ? 'is-editing' : ''}`} aria-label="Architecture diagram">
-          <div className="canvas-mode"><span />Drag a component to move it · Drag empty space to pan</div>
-          <Diagram key={scope} scope={scope} graph={graph} selection={selection} editing={editing} select={setSelection}
+        <section className={`canvas ${editing ? 'is-editing' : ''} ${panning ? 'is-panning' : ''}`} aria-label="Architecture diagram">
+          <div className="canvas-mode" role="group" aria-label="Canvas tool">
+            <button aria-pressed={!panning} onClick={() => setPanning(false)}><MousePointer2 size={14} /> Move objects</button>
+            <button aria-pressed={panning} onClick={() => setPanning(true)}><Hand size={14} /> Pan canvas</button>
+          </div>
+          <Diagram key={scope} scope={scope} graph={graph} selection={selection} editing={editing} panning={panning} select={setSelection}
             move={(id, { x, y }) => setDoc(d => {
               const node = d.graphs[scope].nodes.find(n => n.id === id);
               return !node || (node.x === x && node.y === y) ? d : updateItem(d, scope, 'nodes', id, { x, y });
             })}
+            saveBend={(id, bend) => setDoc(d => updateItem(d, scope, 'edges', id, { bend }))}
             connect={connect} reconnect={reconnect} openDetails={id => { if (scope === ROOT) go(id); }} />
           {graph.nodes.length === 0 && <p className="empty-canvas">This layer is empty. {editing ? 'Add a component to get started.' : 'Switch to Edit diagram to add a component.'}</p>}
         </section>

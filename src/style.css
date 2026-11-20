@@ -64,9 +64,16 @@ h1 { font-size: clamp(30px, 4vw, 46px); line-height: 1.12; letter-spacing: -.045
 .amber { --accent: #fac180; }
 .canvas { height: clamp(465px, 66vh, 780px); position: relative; overflow: hidden; background: #0c1523; }
 .canvas.is-editing { border-color: #426d70; }
-.canvas-mode { position: absolute; display: flex; align-items: center; gap: 7px; z-index: 3; top: 11px; left: 12px; color: #c7d7e8; background: #111d30; border: 1px solid #33465c; border-radius: 20px; padding: 6px 10px; font-size: 12px; pointer-events: none; }
-.canvas-mode span { width: 7px; height: 7px; background: #88a8c6; border-radius: 50%; }
-.is-editing .canvas-mode span { background: #73e4d0; }
+.canvas-mode { position: absolute; display: flex; gap: 4px; z-index: 5; top: 11px; left: 12px; padding: 4px; background: #101d30; border: 1px solid #33465c; border-radius: 9px; }
+.canvas-mode button { display: flex; align-items: center; gap: 6px; font-size: 13px; padding: 6px 8px; background: transparent; border-color: transparent; }
+.canvas-mode button[aria-pressed="true"] { color: #9df2e7; background: #193a43; border-color: #336065; }
+.canvas.is-panning .react-flow__node, .canvas.is-panning .react-flow__edge * { pointer-events: none !important; }
+.canvas.is-panning .react-flow__pane { cursor: grab; }
+.canvas.is-panning .react-flow__pane:active { cursor: grabbing; }
+.connection-grip { pointer-events: stroke; cursor: grab; touch-action: none; }
+.connection-grip:active { cursor: grabbing; }
+.node-note { position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; padding: 5px 8px; border: 1px solid #405875; border-radius: 7px; background: #15243a; color: #edf5ff; font-size: 17px; line-height: 1.35; text-align: right; font-family: Arial, sans-serif; }
+.inspector .inspector-note { font-size: 15px; color: #e3eef9; }
 .node-card {
   width: 224px; min-height: 121px; display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; overflow-wrap: anywhere; user-select: none;
   background: #1a293d; border: 1px solid color-mix(in srgb, var(--accent), #1c2c44 55%); border-radius: 12px;
@@ -83,7 +90,7 @@ h1 { font-size: clamp(30px, 4vw, 46px); line-height: 1.12; letter-spacing: -.045
 .react-flow__edge { cursor: pointer; }
 .react-flow__controls { box-shadow: none; border: 1px solid #3a4f67; border-radius: 8px; overflow: hidden; }
 .react-flow__controls .react-flow__controls-button { background: #192a40; border-bottom: 1px solid #2c4057; color: #d8e7fb; }
-.react-flow__controls .react-flow__controls-button svg { fill: #d8e7fb; }
+.react-flow__controls .react-flow__controls-button svg, .react-flow__controls .react-flow__controls-button svg path { fill: #d8e7fb; }
 .fit-button { position: absolute; display: flex; align-items: center; gap: 7px; right: 12px; bottom: 12px; z-index: 4; font-size: 13px; }
 .empty-canvas { position: absolute; left: 18px; top: 53px; color: var(--muted); }
 .inspector { padding: 15px; overflow-wrap: anywhere; }

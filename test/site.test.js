@@ -52,3 +52,14 @@ test('invalid imported or duplicate connections are rejected', () => {
   invalid.graphs.system.edges[0].target = 'missing';
   assert.throws(() => validateArchitecture(invalid), /invalid component/);
 });
+
+test('all published nodes have Arabic notes and drafts preserve Arabic edits and edge bends', () => {
+  const document = validateArchitecture(baseline);
+  const nodes = Object.values(document.graphs).flatMap(graph => graph.nodes);
+  assert.ok(nodes.every(node => /\p{Script=Arabic}/u.test(node.noteAr)));
+  let draft = updateItem(document, 'system', 'nodes', 'storage', { noteAr: 'شرح محدث للتخزين' });
+  draft = updateItem(draft, 'system', 'edges', 'processing-storage', { bend: { x: 1020, y: 110 } });
+  assert.deepEqual(validateArchitecture(JSON.parse(JSON.stringify(draft))), draft);
+  delete draft.graphs.system.nodes[0].noteAr;
+  assert.doesNotThrow(() => validateArchitecture(draft));
+});
