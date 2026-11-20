@@ -1,0 +1,740 @@
+{
+  "start": "2026-11-20",
+  "end": "2026-12-19",
+  "people": [
+    {
+      "name": "Mahmoud",
+      "role": "Architecture & integration"
+    },
+    {
+      "name": "Youssef",
+      "role": "Data engineering"
+    },
+    {
+      "name": "David",
+      "role": "AI / NLP"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "M01",
+      "person": "Mahmoud",
+      "date": "2026-11-20",
+      "action": "Pin main and PR 17, map existing contracts",
+      "evidence": "Pinned baseline audit",
+      "hours": 3.5
+    },
+    {
+      "id": "Y01",
+      "person": "Youssef",
+      "date": "2026-11-20",
+      "action": "Inventory adapter inputs, logs and reproducible data access",
+      "evidence": "Adapter and data access inventory",
+      "hours": 3.5
+    },
+    {
+      "id": "D01",
+      "person": "David",
+      "date": "2026-11-20",
+      "action": "Inventory extraction, taxonomy and evaluation gaps",
+      "evidence": "NLP gap and artifact inventory",
+      "hours": 3.5
+    },
+    {
+      "id": "M02",
+      "person": "Mahmoud",
+      "date": "2026-11-21",
+      "action": "Approve job UUID, run keys and API fixture schema",
+      "evidence": "Approved UUID, keys and API fixture decision",
+      "hours": 3.5
+    },
+    {
+      "id": "Y02",
+      "person": "Youssef",
+      "date": "2026-11-21",
+      "action": "Define raw envelope and supply synthetic EG SA AE examples",
+      "evidence": "Raw JSON contract and three synthetic country fixtures",
+      "hours": 3.5
+    },
+    {
+      "id": "D02",
+      "person": "David",
+      "date": "2026-11-21",
+      "action": "Define enrichment and span-offset fixture and failure statuses",
+      "evidence": "Enrichment fixture with span offsets and failures",
+      "hours": 3.5
+    },
+    {
+      "id": "M03",
+      "person": "Mahmoud",
+      "date": "2026-11-22",
+      "action": "Set up PostgreSQL migrations and health route",
+      "evidence": "Migration smoke log and health response",
+      "hours": 3.5
+    },
+    {
+      "id": "Y03",
+      "person": "Youssef",
+      "date": "2026-11-22",
+      "action": "Run synthetic adapter to immutable raw envelope",
+      "evidence": "Synthetic run manifest and archived fixture",
+      "hours": 3.5
+    },
+    {
+      "id": "D03",
+      "person": "David",
+      "date": "2026-11-22",
+      "action": "Build fixture consumer and starter alias map",
+      "evidence": "Fixture consumer output and alias seed",
+      "hours": 3.5
+    },
+    {
+      "id": "M04",
+      "person": "Mahmoud",
+      "date": "2026-11-23",
+      "action": "Approve source, collection cap and secret handling",
+      "evidence": "Source approval and secret-handling record",
+      "hours": 3.5
+    },
+    {
+      "id": "Y04",
+      "person": "Youssef",
+      "date": "2026-11-23",
+      "action": "Check allowed source access, scopes and quota; choose backup",
+      "evidence": "Provider capability matrix and fallback decision",
+      "hours": 3.5
+    },
+    {
+      "id": "D04",
+      "person": "David",
+      "date": "2026-11-23",
+      "action": "Write blinded annotation instructions and split manifest",
+      "evidence": "Annotation guide and split specification",
+      "hours": 3.5
+    },
+    {
+      "id": "M05",
+      "person": "Mahmoud",
+      "date": "2026-11-24",
+      "action": "Review run health and inspect provenance joins",
+      "evidence": "Run-health note with provenance joins",
+      "hours": 3.5
+    },
+    {
+      "id": "Y05",
+      "person": "Youssef",
+      "date": "2026-11-24",
+      "action": "Collect capped live batch, archive manifest and raw payload",
+      "evidence": "Capped run ID with raw archive checksum",
+      "hours": 3.5
+    },
+    {
+      "id": "D05",
+      "person": "David",
+      "date": "2026-11-24",
+      "action": "Exercise dictionary extractor against synthetic job descriptions",
+      "evidence": "Synthetic extractor results and errors",
+      "hours": 3.5
+    },
+    {
+      "id": "M06",
+      "person": "Mahmoud",
+      "date": "2026-11-25",
+      "action": "Review job and provenance constraints, empty API responses",
+      "evidence": "Canonical constraint and API-empty checks",
+      "hours": 3.5
+    },
+    {
+      "id": "Y06",
+      "person": "Youssef",
+      "date": "2026-11-25",
+      "action": "Map title, country, date and source IDs and persist canonical job",
+      "evidence": "Live canonical UUID with source trace",
+      "hours": 3.5
+    },
+    {
+      "id": "D06",
+      "person": "David",
+      "date": "2026-11-25",
+      "action": "Validate taxonomy IDs and pin baseline manifest",
+      "evidence": "Validated taxonomy and pinned baseline manifest",
+      "hours": 3.5
+    },
+    {
+      "id": "M07",
+      "person": "Mahmoud",
+      "date": "2026-11-26",
+      "action": "Expose health and first filtered jobs API",
+      "evidence": "Jobs endpoint and minimal page evidence",
+      "hours": 3.5
+    },
+    {
+      "id": "Y07",
+      "person": "Youssef",
+      "date": "2026-11-26",
+      "action": "Replay raw batch twice and compare unique keys",
+      "evidence": "Two replay counts and stable unique keys",
+      "hours": 3.5
+    },
+    {
+      "id": "D07",
+      "person": "David",
+      "date": "2026-11-26",
+      "action": "Persist one baseline job-skill result through agreed schema",
+      "evidence": "Persisted enrichment FK example",
+      "hours": 3.5
+    },
+    {
+      "id": "M08",
+      "person": "Mahmoud",
+      "date": "2026-11-27",
+      "action": "Review slice and record bottleneck decisions",
+      "evidence": "Slice review with blocker owners",
+      "hours": 2
+    },
+    {
+      "id": "Y08",
+      "person": "Youssef",
+      "date": "2026-11-27",
+      "action": "Record batch reconciliation and remaining source risks",
+      "evidence": "Batch reconciliation and provider risk update",
+      "hours": 2
+    },
+    {
+      "id": "D08",
+      "person": "David",
+      "date": "2026-11-27",
+      "action": "Review sample false positives and update annotation instructions",
+      "evidence": "False-positive review and revised guide",
+      "hours": 2
+    },
+    {
+      "id": "M09",
+      "person": "Mahmoud",
+      "date": "2026-11-28",
+      "action": "Review job identity and merge audit fields",
+      "evidence": "Identity rules and merge audit fields",
+      "hours": 3.5
+    },
+    {
+      "id": "Y09",
+      "person": "Youssef",
+      "date": "2026-11-28",
+      "action": "Test collision cases across location, employer and source IDs",
+      "evidence": "Dedup collision fixture report",
+      "hours": 3.5
+    },
+    {
+      "id": "D09",
+      "person": "David",
+      "date": "2026-11-28",
+      "action": "Write overlap resolution and ambiguous alias fixtures",
+      "evidence": "Alias overlap and ambiguity fixtures",
+      "hours": 3.5
+    },
+    {
+      "id": "M10",
+      "person": "Mahmoud",
+      "date": "2026-11-29",
+      "action": "Add canonical validation and migration smoke in CI",
+      "evidence": "Canonical validator and CI migration smoke",
+      "hours": 3.5
+    },
+    {
+      "id": "Y10",
+      "person": "Youssef",
+      "date": "2026-11-29",
+      "action": "Quarantine malformed input and test replay",
+      "evidence": "Quarantine cases and replay reconciliation",
+      "hours": 3.5
+    },
+    {
+      "id": "D10",
+      "person": "David",
+      "date": "2026-11-29",
+      "action": "Test Arabic, English and mixed-language spans",
+      "evidence": "Bilingual offset and boundary fixture outputs",
+      "hours": 3.5
+    },
+    {
+      "id": "M11",
+      "person": "Mahmoud",
+      "date": "2026-11-30",
+      "action": "Review transaction and checkpoint boundaries",
+      "evidence": "Commit/checkpoint review and rollback case",
+      "hours": 3.5
+    },
+    {
+      "id": "Y11",
+      "person": "Youssef",
+      "date": "2026-11-30",
+      "action": "Add cursor, overlap query and retry budget tests",
+      "evidence": "Retry and interrupted-run test logs",
+      "hours": 3.5
+    },
+    {
+      "id": "D11",
+      "person": "David",
+      "date": "2026-11-30",
+      "action": "Add model/taxonomy/description-hash retry key",
+      "evidence": "Versioned enrichment idempotency fixture",
+      "hours": 3.5
+    },
+    {
+      "id": "M12",
+      "person": "Mahmoud",
+      "date": "2026-12-01",
+      "action": "Define filters, count denominators and response shapes",
+      "evidence": "Filter spec and hand-computed expected counts",
+      "hours": 3.5
+    },
+    {
+      "id": "Y12",
+      "person": "Youssef",
+      "date": "2026-12-01",
+      "action": "Seed date, country, duplicate and missing-date fixtures",
+      "evidence": "Seed data across missing dates and duplicates",
+      "hours": 3.5
+    },
+    {
+      "id": "D12",
+      "person": "David",
+      "date": "2026-12-01",
+      "action": "Verify distinct job-skill counting with repeated mentions",
+      "evidence": "Verified distinct-count fixture",
+      "hours": 3.5
+    },
+    {
+      "id": "M13",
+      "person": "Mahmoud",
+      "date": "2026-12-02",
+      "action": "Review release documentation skeleton",
+      "evidence": "Release documentation outline",
+      "hours": 3.5
+    },
+    {
+      "id": "Y13",
+      "person": "Youssef",
+      "date": "2026-12-02",
+      "action": "Select permissible evaluation rows across language and source",
+      "evidence": "Permitted independent sample manifest",
+      "hours": 3.5
+    },
+    {
+      "id": "D13",
+      "person": "David",
+      "date": "2026-12-02",
+      "action": "Create independent blind gold and adjudication queue",
+      "evidence": "Blind gold, adjudication queue and locked split",
+      "hours": 3.5
+    },
+    {
+      "id": "M14",
+      "person": "Mahmoud",
+      "date": "2026-12-03",
+      "action": "Implement jobs and skill demand endpoints with validated filters",
+      "evidence": "OpenAPI and paired jobs/skills responses",
+      "hours": 3.5
+    },
+    {
+      "id": "Y14",
+      "person": "Youssef",
+      "date": "2026-12-03",
+      "action": "Verify query plan and provenance filters",
+      "evidence": "Query-plan and provenance checks",
+      "hours": 3.5
+    },
+    {
+      "id": "D14",
+      "person": "David",
+      "date": "2026-12-03",
+      "action": "Compare SQL distinct counts with enrichment fixture",
+      "evidence": "SQL-to-enrichment count comparison",
+      "hours": 3.5
+    },
+    {
+      "id": "M15",
+      "person": "Mahmoud",
+      "date": "2026-12-04",
+      "action": "Wire country, role and date inputs to live endpoints",
+      "evidence": "Connected filter UI capture and response evidence",
+      "hours": 3.5
+    },
+    {
+      "id": "Y15",
+      "person": "Youssef",
+      "date": "2026-12-04",
+      "action": "Verify demo data and surface sample-size coverage",
+      "evidence": "Demo cohort distribution and coverage statement",
+      "hours": 3.5
+    },
+    {
+      "id": "D15",
+      "person": "David",
+      "date": "2026-12-04",
+      "action": "Check labels and top-skill counts against SQL",
+      "evidence": "Ranked skill label reconciliation",
+      "hours": 3.5
+    },
+    {
+      "id": "M16",
+      "person": "Mahmoud",
+      "date": "2026-12-05",
+      "action": "Review scope and updated delivery risks",
+      "evidence": "Midpoint scope decision",
+      "hours": 2
+    },
+    {
+      "id": "Y16",
+      "person": "Youssef",
+      "date": "2026-12-05",
+      "action": "Reconcile source counts and verify redacted run manifest",
+      "evidence": "Redacted manifest and count review",
+      "hours": 2
+    },
+    {
+      "id": "D16",
+      "person": "David",
+      "date": "2026-12-05",
+      "action": "Audit label disagreements and set adjudication priority",
+      "evidence": "Annotation disagreement evidence",
+      "hours": 2
+    },
+    {
+      "id": "M17",
+      "person": "Mahmoud",
+      "date": "2026-12-06",
+      "action": "Review failure denominator and unit of measurement",
+      "evidence": "Failure-denominator and unit review",
+      "hours": 3.5
+    },
+    {
+      "id": "Y17",
+      "person": "Youssef",
+      "date": "2026-12-06",
+      "action": "Check sample leakage across duplicate clusters",
+      "evidence": "Duplicate-cluster leakage audit",
+      "hours": 3.5
+    },
+    {
+      "id": "D17",
+      "person": "David",
+      "date": "2026-12-06",
+      "action": "Run pinned held-out baseline; compute micro precision recall F1",
+      "evidence": "Pinned held-out metrics with false-positive and false-negative examples",
+      "hours": 3.5
+    },
+    {
+      "id": "M18",
+      "person": "Mahmoud",
+      "date": "2026-12-07",
+      "action": "Review quality decision and UI messaging",
+      "evidence": "Quality decision and UI disclosure",
+      "hours": 3.5
+    },
+    {
+      "id": "Y18",
+      "person": "Youssef",
+      "date": "2026-12-07",
+      "action": "Audit country and role sampling using accepted raw provenance",
+      "evidence": "Audited country and role sampling",
+      "hours": 3.5
+    },
+    {
+      "id": "D18",
+      "person": "David",
+      "date": "2026-12-07",
+      "action": "Fix failure accounting and alias bugs using dev set only",
+      "evidence": "Dev-set fixes and fixed-holdout report notes",
+      "hours": 3.5
+    },
+    {
+      "id": "M19",
+      "person": "Mahmoud",
+      "date": "2026-12-08",
+      "action": "Implement comparable bucket API and empty states",
+      "evidence": "Comparable-window API and empty states",
+      "hours": 3.5
+    },
+    {
+      "id": "Y19",
+      "person": "Youssef",
+      "date": "2026-12-08",
+      "action": "Aggregate publication-date coverage per country and source",
+      "evidence": "Date coverage by source and country",
+      "hours": 3.5
+    },
+    {
+      "id": "D19",
+      "person": "David",
+      "date": "2026-12-08",
+      "action": "Compute distinct counts and check missing extraction coverage",
+      "evidence": "Distinct skill counts and extraction coverage",
+      "hours": 3.5
+    },
+    {
+      "id": "M20",
+      "person": "Mahmoud",
+      "date": "2026-12-09",
+      "action": "Add metadata and release evidence links to API docs",
+      "evidence": "API documentation with trace and release links",
+      "hours": 3.5
+    },
+    {
+      "id": "Y20",
+      "person": "Youssef",
+      "date": "2026-12-09",
+      "action": "Audit reload lineage from job through raw batch and adapter",
+      "evidence": "Raw-to-canonical replay trace",
+      "hours": 3.5
+    },
+    {
+      "id": "D20",
+      "person": "David",
+      "date": "2026-12-09",
+      "action": "Audit prediction provenance from skill to job text snapshot",
+      "evidence": "Skill-to-description provenance audit",
+      "hours": 3.5
+    },
+    {
+      "id": "M21",
+      "person": "Mahmoud",
+      "date": "2026-12-10",
+      "action": "Exercise 422, 503 and missing-data UX",
+      "evidence": "422 and 503 responses with matching UI states",
+      "hours": 3.5
+    },
+    {
+      "id": "Y21",
+      "person": "Youssef",
+      "date": "2026-12-10",
+      "action": "Exercise 429, timeout and interrupted page recovery",
+      "evidence": "429, timeout and interrupted cursor tests",
+      "hours": 3.5
+    },
+    {
+      "id": "D21",
+      "person": "David",
+      "date": "2026-12-10",
+      "action": "Inject malformed result and confirm quarantine or failure",
+      "evidence": "Malformed result quarantine or failure log",
+      "hours": 3.5
+    },
+    {
+      "id": "M22",
+      "person": "Mahmoud",
+      "date": "2026-12-11",
+      "action": "Build Compose release and verify health/readiness",
+      "evidence": "Clean Compose deployment and health logs",
+      "hours": 3.5
+    },
+    {
+      "id": "Y22",
+      "person": "Youssef",
+      "date": "2026-12-11",
+      "action": "Check backup restore and migration against seeded DB",
+      "evidence": "Fresh data migration and restoration logs",
+      "hours": 3.5
+    },
+    {
+      "id": "D22",
+      "person": "David",
+      "date": "2026-12-11",
+      "action": "Verify no provider secrets required for dictionary demo",
+      "evidence": "Dictionary demo boot with provider credentials absent",
+      "hours": 3.5
+    },
+    {
+      "id": "M23",
+      "person": "Mahmoud",
+      "date": "2026-12-12",
+      "action": "Triage rehearsal defects by severity",
+      "evidence": "Capacity and defect review record",
+      "hours": 2
+    },
+    {
+      "id": "Y23",
+      "person": "Youssef",
+      "date": "2026-12-12",
+      "action": "Test job counts after restore",
+      "evidence": "Source stability checkpoint",
+      "hours": 2
+    },
+    {
+      "id": "D23",
+      "person": "David",
+      "date": "2026-12-12",
+      "action": "Review evaluation reporting and demo labels",
+      "evidence": "Evaluation and regression review",
+      "hours": 2
+    },
+    {
+      "id": "M24",
+      "person": "Mahmoud",
+      "date": "2026-12-13",
+      "action": "Measure local API and dashboard timings with recorded dataset size",
+      "evidence": "API/dashboard timings and test scale",
+      "hours": 3.5
+    },
+    {
+      "id": "Y24",
+      "person": "Youssef",
+      "date": "2026-12-13",
+      "action": "Measure ingest batch timings and redact request logs",
+      "evidence": "Ingest timing and redacted log evidence",
+      "hours": 3.5
+    },
+    {
+      "id": "D24",
+      "person": "David",
+      "date": "2026-12-13",
+      "action": "Measure extraction throughput and review diagnostic data",
+      "evidence": "Extraction throughput and diagnostic review",
+      "hours": 3.5
+    },
+    {
+      "id": "M25",
+      "person": "Mahmoud",
+      "date": "2026-12-14",
+      "action": "Run browser filter and release smoke checklist",
+      "evidence": "Rehearsal record and defect disposition",
+      "hours": 3.5
+    },
+    {
+      "id": "Y25",
+      "person": "Youssef",
+      "date": "2026-12-14",
+      "action": "Run fresh permitted ingest or record a controlled source outage",
+      "evidence": "Capped collection trace for rehearsal",
+      "hours": 3.5
+    },
+    {
+      "id": "D25",
+      "person": "David",
+      "date": "2026-12-14",
+      "action": "Replay extraction and reproduce evaluation from pinned setup",
+      "evidence": "Signed metric validation and evidence packet",
+      "hours": 3.5
+    },
+    {
+      "id": "M26",
+      "person": "Mahmoud",
+      "date": "2026-12-15",
+      "action": "Resolve highest-priority system blocker or verify release candidate",
+      "evidence": "P0 repair or reserve usage decision",
+      "hours": 1.5
+    },
+    {
+      "id": "Y26",
+      "person": "Youssef",
+      "date": "2026-12-15",
+      "action": "Resolve critical data defect or rerun provenance checks",
+      "evidence": "Pipeline repair or reserve usage note",
+      "hours": 1.5
+    },
+    {
+      "id": "D26",
+      "person": "David",
+      "date": "2026-12-15",
+      "action": "Resolve critical extraction defect or review corpus evidence",
+      "evidence": "NLP repair or reserve usage note",
+      "hours": 1.5
+    },
+    {
+      "id": "M27",
+      "person": "Mahmoud",
+      "date": "2026-12-16",
+      "action": "Rehearse rollback and stage frozen release",
+      "evidence": "Rollback rehearsal and staged candidate",
+      "hours": 1.5
+    },
+    {
+      "id": "Y27",
+      "person": "Youssef",
+      "date": "2026-12-16",
+      "action": "Restore approved backup and verify counts",
+      "evidence": "Restored counts and backup evidence",
+      "hours": 1.5
+    },
+    {
+      "id": "D27",
+      "person": "David",
+      "date": "2026-12-16",
+      "action": "Validate frozen taxonomy and evaluation checksums",
+      "evidence": "Frozen taxonomy and evaluation checksums",
+      "hours": 1.5
+    },
+    {
+      "id": "M28",
+      "person": "Mahmoud",
+      "date": "2026-12-17",
+      "action": "Tag candidate in plan and complete operations guide",
+      "evidence": "Candidate identifier and operations guide",
+      "hours": 3.5
+    },
+    {
+      "id": "Y28",
+      "person": "Youssef",
+      "date": "2026-12-17",
+      "action": "Deliver schema dictionary and source limitations",
+      "evidence": "Schema dictionary and source limitations",
+      "hours": 3.5
+    },
+    {
+      "id": "D28",
+      "person": "David",
+      "date": "2026-12-17",
+      "action": "Deliver NLP runbook and evaluation appendix",
+      "evidence": "NLP runbook and evaluation appendix",
+      "hours": 3.5
+    },
+    {
+      "id": "M29",
+      "person": "Mahmoud",
+      "date": "2026-12-18",
+      "action": "Present story and rehearse offline fallback",
+      "evidence": "Timed demo and offline evidence sequence",
+      "hours": 3.5
+    },
+    {
+      "id": "Y29",
+      "person": "Youssef",
+      "date": "2026-12-18",
+      "action": "Show live-batch ingest evidence and raw-to-job trace",
+      "evidence": "Live-batch raw-to-job trace",
+      "hours": 3.5
+    },
+    {
+      "id": "D29",
+      "person": "David",
+      "date": "2026-12-18",
+      "action": "Show write-back, labels and evaluation error examples",
+      "evidence": "NLP write-back, evaluation and error examples",
+      "hours": 3.5
+    },
+    {
+      "id": "M30",
+      "person": "Mahmoud",
+      "date": "2026-12-19",
+      "action": "Record decision, demo and handoff ownership",
+      "evidence": "Final gate evidence and collective sign-off",
+      "hours": 2
+    },
+    {
+      "id": "Y30",
+      "person": "Youssef",
+      "date": "2026-12-19",
+      "action": "Provide manifests, replay instructions and known gaps",
+      "evidence": "Demonstrated raw-to-canonical trace",
+      "hours": 2
+    },
+    {
+      "id": "D30",
+      "person": "David",
+      "date": "2026-12-19",
+      "action": "Provide pinned taxonomy, labels and evaluation evidence",
+      "evidence": "Demonstrated skill write-back and evaluation",
+      "hours": 2
+    }
+  ]
+}

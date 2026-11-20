@@ -1,0 +1,1130 @@
+{
+  "version": 1,
+  "graphs": {
+    "system": {
+      "nodes": [
+        {
+          "id": "sources",
+          "label": "External Sources",
+          "summary": "Potential job providers",
+          "technology": "",
+          "category": "gray",
+          "x": 0,
+          "y": 0,
+          "notes": "Evaluate candidate sources LinkedIn, Wuzzuf, Bayt and JSearch API. Record permission, country coverage, fields, rate limits, pagination, acquisition limits and retention. Use one authorized connector for MVP."
+        },
+        {
+          "id": "ingestion",
+          "label": "Ingestion",
+          "summary": "Collection orchestration",
+          "technology": "Python",
+          "category": "blue",
+          "x": 285,
+          "y": 0,
+          "notes": "Use run UUID and per-page checkpoint after commit. Retry transient 429 and 5xx with Retry-After, jitter and cap. Schedule with cron or manual command."
+        },
+        {
+          "id": "raw",
+          "label": "Raw Storage",
+          "summary": "Immutable provider payloads",
+          "technology": "Gzip / NDJSON",
+          "category": "blue",
+          "x": 570,
+          "y": 0,
+          "notes": "Write atomically via temp file, then register manifest. Save provider ID, publication value/version when present, ingest time and source identity."
+        },
+        {
+          "id": "processing",
+          "label": "Data Processing",
+          "summary": "Validation and deduplication",
+          "technology": "Python",
+          "category": "blue",
+          "x": 855,
+          "y": 0,
+          "notes": "Preserve original text, normalize country/title separately, adopt source ID, then exact independently verified identity. Treat weak cross-source matches as review candidates."
+        },
+        {
+          "id": "storage",
+          "label": "Structured Storage",
+          "summary": "Canonical jobs and skills",
+          "technology": "PostgreSQL",
+          "category": "blue",
+          "x": 1140,
+          "y": 0,
+          "notes": "Use UUID job PK, source-level uniqueness, immutable description hash, active result selection, indexes for filters and backup/restore."
+        },
+        {
+          "id": "nlp",
+          "label": "AI / NLP",
+          "summary": "Versioned skill enrichment",
+          "technology": "Dictionary baseline",
+          "category": "purple",
+          "x": 1140,
+          "y": 255,
+          "notes": "Keep offsets in original text using a match-to-original map. Disambiguate short aliases. Store unmatched as candidates; publish results atomically by version."
+        },
+        {
+          "id": "analytics",
+          "label": "Analytics",
+          "summary": "Metrics and coverage",
+          "technology": "PostgreSQL",
+          "category": "purple",
+          "x": 855,
+          "y": 510,
+          "notes": "Filter once by [from,to), count distinct jobs per skill, report eligible and enriched counts. Trends compare equal windows and source composition."
+        },
+        {
+          "id": "backend",
+          "label": "Backend",
+          "summary": "REST API and query services",
+          "technology": "FastAPI",
+          "category": "teal",
+          "x": 570,
+          "y": 255,
+          "notes": "Describe endpoints via OpenAPI. Use stable cursor ordered by date and UUID, bounded page size, request ID and parameterized SQL."
+        },
+        {
+          "id": "frontend",
+          "label": "Frontend",
+          "summary": "Market intelligence dashboard",
+          "technology": "React",
+          "category": "teal",
+          "x": 285,
+          "y": 255,
+          "notes": "Keep shared query state, abort outdated requests, display sample size and basis, test loading/empty/error and keyboard access."
+        },
+        {
+          "id": "operations",
+          "label": "Platform Operations",
+          "summary": "Scheduling, CI, logs and recovery",
+          "technology": "Docker",
+          "category": "amber",
+          "x": 0,
+          "y": 510,
+          "notes": "Unit tests on each PR, integration with disposable PostgreSQL, smoke and restore on clean machine. Record run IDs, durations and safe error classes."
+        }
+      ],
+      "edges": [
+        {
+          "id": "source-ingestion",
+          "source": "sources",
+          "target": "ingestion",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "ingestion-raw",
+          "source": "ingestion",
+          "target": "raw",
+          "label": "Raw records",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "raw-processing",
+          "source": "raw",
+          "target": "processing",
+          "label": "Replay",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "processing-storage",
+          "source": "processing",
+          "target": "storage",
+          "label": "Canonical jobs",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "storage-nlp",
+          "source": "storage",
+          "target": "nlp",
+          "label": "Descriptions",
+          "kind": "data",
+          "sourcePort": "bottom",
+          "targetPort": "top"
+        },
+        {
+          "id": "nlp-storage",
+          "source": "nlp",
+          "target": "storage",
+          "label": "Write-back",
+          "kind": "enrichment",
+          "sourcePort": "right",
+          "targetPort": "right"
+        },
+        {
+          "id": "storage-analytics",
+          "source": "storage",
+          "target": "analytics",
+          "label": "Jobs and skills",
+          "kind": "data",
+          "sourcePort": "bottom",
+          "targetPort": "right"
+        },
+        {
+          "id": "analytics-backend",
+          "source": "analytics",
+          "target": "backend",
+          "label": "Metrics",
+          "kind": "data",
+          "sourcePort": "left",
+          "targetPort": "bottom"
+        },
+        {
+          "id": "storage-backend",
+          "source": "storage",
+          "target": "backend",
+          "label": "Direct job queries",
+          "kind": "data",
+          "sourcePort": "bottom",
+          "targetPort": "top"
+        },
+        {
+          "id": "backend-frontend",
+          "source": "backend",
+          "target": "frontend",
+          "label": "API",
+          "kind": "data",
+          "sourcePort": "left",
+          "targetPort": "right"
+        },
+        {
+          "id": "operations-ingestion",
+          "source": "operations",
+          "target": "ingestion",
+          "label": "Scheduling",
+          "kind": "control",
+          "sourcePort": "top",
+          "targetPort": "bottom"
+        }
+      ]
+    },
+    "sources": {
+      "nodes": [
+        {
+          "id": "sources-1",
+          "label": "Provider approval",
+          "summary": "Compare access, terms, geographic coverage, quota and retention; approve one source",
+          "technology": "",
+          "category": "gray",
+          "x": 0,
+          "y": 0,
+          "notes": "Inputs: Candidate notes for LinkedIn, Wuzzuf, Bayt, JSearch API and backup provider\nOutputs: Approved source capability record or explicit no-go"
+        },
+        {
+          "id": "sources-2",
+          "label": "Adapter registry",
+          "summary": "Register one authorized implementation under a stable source slug",
+          "technology": "",
+          "category": "gray",
+          "x": 295,
+          "y": 0,
+          "notes": "Inputs: Approved capability record and credential variable names\nOutputs: Adapter registration and conformance fixture"
+        },
+        {
+          "id": "sources-3",
+          "label": "Source health",
+          "summary": "Check quota, failures, changed fields and coverage by country",
+          "technology": "",
+          "category": "gray",
+          "x": 590,
+          "y": 0,
+          "notes": "Inputs: Run ledger, response codes and observed countries\nOutputs: Source health note and escalation decision"
+        }
+      ],
+      "edges": [
+        {
+          "id": "sources-flow-1",
+          "source": "sources-1",
+          "target": "sources-2",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "sources-flow-2",
+          "source": "sources-2",
+          "target": "sources-3",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        }
+      ]
+    },
+    "ingestion": {
+      "nodes": [
+        {
+          "id": "ingestion-1",
+          "label": "Source selection",
+          "summary": "Resolve the approved provider, country/role query and execution cap",
+          "technology": "Python",
+          "category": "blue",
+          "x": 0,
+          "y": 0,
+          "notes": "Inputs: Capability record and requested window\nOutputs: Validated run configuration"
+        },
+        {
+          "id": "ingestion-2",
+          "label": "Source adapter",
+          "summary": "Map common connector inputs to provider-specific request fields",
+          "technology": "Python",
+          "category": "blue",
+          "x": 295,
+          "y": 0,
+          "notes": "Inputs: Run configuration and adapter registry\nOutputs: Provider request plan without secrets in logs"
+        },
+        {
+          "id": "ingestion-3",
+          "label": "API or actor execution",
+          "summary": "Invoke the approved endpoint or actor with timeouts and a per-run budget",
+          "technology": "Python",
+          "category": "blue",
+          "x": 590,
+          "y": 0,
+          "notes": "Inputs: Provider request and injected credential\nOutputs: Provider response and remote run identifier"
+        },
+        {
+          "id": "ingestion-4",
+          "label": "Pagination and collection",
+          "summary": "Resume from the stored cursor; retry transient failures within the run budget",
+          "technology": "Python",
+          "category": "blue",
+          "x": 885,
+          "y": 0,
+          "notes": "Inputs: Provider response page and durable page token\nOutputs: Validated records and cursor candidate"
+        },
+        {
+          "id": "ingestion-5",
+          "label": "Raw persistence",
+          "summary": "Write completed page to the immutable archive before advancing its cursor",
+          "technology": "Python",
+          "category": "blue",
+          "x": 885,
+          "y": 205,
+          "notes": "Inputs: Original provider bytes and run UUID\nOutputs: Raw archive reference and checksum"
+        },
+        {
+          "id": "ingestion-6",
+          "label": "Collection metadata",
+          "summary": "Record page counts, source, query, timestamps and committed cursor",
+          "technology": "Python",
+          "category": "blue",
+          "x": 590,
+          "y": 205,
+          "notes": "Inputs: Manifest, checksums and response metadata\nOutputs: Run ledger and counters"
+        },
+        {
+          "id": "ingestion-7",
+          "label": "Completion or failure",
+          "summary": "Reconcile counters and classify successful, partial or failed run",
+          "technology": "Python",
+          "category": "blue",
+          "x": 295,
+          "y": 205,
+          "notes": "Inputs: Ledger and safe error class\nOutputs: Terminal status with replay or escalation decision"
+        }
+      ],
+      "edges": [
+        {
+          "id": "ingestion-flow-1",
+          "source": "ingestion-1",
+          "target": "ingestion-2",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "ingestion-flow-2",
+          "source": "ingestion-2",
+          "target": "ingestion-3",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "ingestion-flow-3",
+          "source": "ingestion-3",
+          "target": "ingestion-4",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "ingestion-flow-4",
+          "source": "ingestion-4",
+          "target": "ingestion-5",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "bottom",
+          "targetPort": "top"
+        },
+        {
+          "id": "ingestion-flow-5",
+          "source": "ingestion-5",
+          "target": "ingestion-6",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "left",
+          "targetPort": "right"
+        },
+        {
+          "id": "ingestion-flow-6",
+          "source": "ingestion-6",
+          "target": "ingestion-7",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "left",
+          "targetPort": "right"
+        }
+      ]
+    },
+    "raw": {
+      "nodes": [
+        {
+          "id": "raw-1",
+          "label": "Envelope validation",
+          "summary": "Check source and run identity, checksum format and ordinal uniqueness",
+          "technology": "Gzip / NDJSON",
+          "category": "blue",
+          "x": 0,
+          "y": 0,
+          "notes": "Inputs: Provider payload and metadata\nOutputs: Accepted versioned envelope or rejection"
+        },
+        {
+          "id": "raw-2",
+          "label": "Immutable archive",
+          "summary": "Atomically persist original payload in restricted storage",
+          "technology": "Gzip / NDJSON",
+          "category": "blue",
+          "x": 295,
+          "y": 0,
+          "notes": "Inputs: RawEnvelope and provider bytes\nOutputs: Archive path and SHA-256"
+        },
+        {
+          "id": "raw-3",
+          "label": "Manifest and hash",
+          "summary": "Commit run-to-object metadata and confirm integrity",
+          "technology": "Gzip / NDJSON",
+          "category": "blue",
+          "x": 590,
+          "y": 0,
+          "notes": "Inputs: Archive reference, source ID and timestamp\nOutputs: Manifest row and durable cursor boundary"
+        },
+        {
+          "id": "raw-4",
+          "label": "Replay reader",
+          "summary": "Verify hash, then stream archived records from selected run",
+          "technology": "Gzip / NDJSON",
+          "category": "blue",
+          "x": 885,
+          "y": 0,
+          "notes": "Inputs: Run ID, archive location and checksum\nOutputs: Ordered raw records for reprocessing"
+        }
+      ],
+      "edges": [
+        {
+          "id": "raw-flow-1",
+          "source": "raw-1",
+          "target": "raw-2",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "raw-flow-2",
+          "source": "raw-2",
+          "target": "raw-3",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "raw-flow-3",
+          "source": "raw-3",
+          "target": "raw-4",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        }
+      ]
+    },
+    "processing": {
+      "nodes": [
+        {
+          "id": "processing-1",
+          "label": "Raw record",
+          "summary": "Load the immutable record, retaining its reference and version",
+          "technology": "Python",
+          "category": "blue",
+          "x": 0,
+          "y": 0,
+          "notes": "Inputs: RawEnvelope v1 and archive bytes\nOutputs: Raw payload plus provenance metadata"
+        },
+        {
+          "id": "processing-2",
+          "label": "Validation",
+          "summary": "Check required fields and types, and quarantine malformed input",
+          "technology": "Python",
+          "category": "blue",
+          "x": 295,
+          "y": 0,
+          "notes": "Inputs: Raw record and source field map\nOutputs: Accepted field map or safe rejection reason"
+        },
+        {
+          "id": "processing-3",
+          "label": "Cleaning",
+          "summary": "Trim and canonicalize display fields while retaining original description",
+          "technology": "Python",
+          "category": "blue",
+          "x": 590,
+          "y": 0,
+          "notes": "Inputs: Validated values and locale rules\nOutputs: Cleaned fields with quality flags"
+        },
+        {
+          "id": "processing-4",
+          "label": "Deduplication",
+          "summary": "Identify provider replays, then evaluate collision evidence before merging",
+          "technology": "Python",
+          "category": "blue",
+          "x": 885,
+          "y": 0,
+          "notes": "Inputs: Source IDs and cleaned entity attributes\nOutputs: Stable canonical key or review candidate"
+        },
+        {
+          "id": "processing-5",
+          "label": "Canonical transformation",
+          "summary": "Map country and role, parse timestamps or preserve nulls, then hash description",
+          "technology": "Python",
+          "category": "blue",
+          "x": 885,
+          "y": 205,
+          "notes": "Inputs: Cleaned fields, provenance and job identity\nOutputs: CanonicalJob v1"
+        },
+        {
+          "id": "processing-6",
+          "label": "Database persistence",
+          "summary": "Atomically upsert the job and source links, allowing safe replay",
+          "technology": "PostgreSQL",
+          "category": "blue",
+          "x": 590,
+          "y": 205,
+          "notes": "Inputs: CanonicalJob and raw refs\nOutputs: Committed UUID and replay reconciliation evidence"
+        }
+      ],
+      "edges": [
+        {
+          "id": "processing-flow-1",
+          "source": "processing-1",
+          "target": "processing-2",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "processing-flow-2",
+          "source": "processing-2",
+          "target": "processing-3",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "processing-flow-3",
+          "source": "processing-3",
+          "target": "processing-4",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "processing-flow-4",
+          "source": "processing-4",
+          "target": "processing-5",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "bottom",
+          "targetPort": "top"
+        },
+        {
+          "id": "processing-flow-5",
+          "source": "processing-5",
+          "target": "processing-6",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "left",
+          "targetPort": "right"
+        }
+      ]
+    },
+    "storage": {
+      "nodes": [
+        {
+          "id": "storage-1",
+          "label": "Migration",
+          "summary": "Apply additive versioned SQL and test upgrade and rollback in disposable PostgreSQL",
+          "technology": "PostgreSQL",
+          "category": "blue",
+          "x": 0,
+          "y": 0,
+          "notes": "Inputs: Pinned migration history and schema version\nOutputs: Ready v1 relational schema"
+        },
+        {
+          "id": "storage-2",
+          "label": "Canonical upsert",
+          "summary": "Commit stable UUIDs and uniqueness rules with source links in a transaction",
+          "technology": "PostgreSQL",
+          "category": "blue",
+          "x": 295,
+          "y": 0,
+          "notes": "Inputs: CanonicalJob v1 and raw refs\nOutputs: Stable job ID and source association"
+        },
+        {
+          "id": "storage-3",
+          "label": "Provenance join",
+          "summary": "Trace a displayed job or metric cluster back to permitted source records",
+          "technology": "PostgreSQL",
+          "category": "blue",
+          "x": 590,
+          "y": 0,
+          "notes": "Inputs: Job ID and collection metadata\nOutputs: Source, run ID, raw checksum and evidence flags"
+        },
+        {
+          "id": "storage-4",
+          "label": "Versioned enrichment",
+          "summary": "Select active enrichment by published configuration while preserving prior evidence",
+          "technology": "PostgreSQL",
+          "category": "blue",
+          "x": 885,
+          "y": 0,
+          "notes": "Inputs: Enrichment v1 and descriptor hash\nOutputs: Reporting view with active job-skill relationships"
+        }
+      ],
+      "edges": [
+        {
+          "id": "storage-flow-1",
+          "source": "storage-1",
+          "target": "storage-2",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "storage-flow-2",
+          "source": "storage-2",
+          "target": "storage-3",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "storage-flow-3",
+          "source": "storage-3",
+          "target": "storage-4",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        }
+      ]
+    },
+    "nlp": {
+      "nodes": [
+        {
+          "id": "nlp-1",
+          "label": "Canonical job description",
+          "summary": "Read the original description by canonical job identifier and content hash",
+          "technology": "Dictionary baseline",
+          "category": "purple",
+          "x": 0,
+          "y": 0,
+          "notes": "Inputs: CanonicalJob v1\nOutputs: Eligible description and traceable job identity"
+        },
+        {
+          "id": "nlp-2",
+          "label": "Skill extraction",
+          "summary": "Recognize Unicode-aware aliases and retain original evidence spans",
+          "technology": "Dictionary baseline",
+          "category": "purple",
+          "x": 295,
+          "y": 0,
+          "notes": "Inputs: Versioned description text and dictionaries\nOutputs: Candidate mentions and code-point offsets"
+        },
+        {
+          "id": "nlp-3",
+          "label": "Skill normalization",
+          "summary": "Normalize candidate text without invalidating original evidence",
+          "technology": "Dictionary baseline",
+          "category": "purple",
+          "x": 590,
+          "y": 0,
+          "notes": "Inputs: Candidate aliases, language and offsets\nOutputs: Normalized alias candidates with ambiguity flags"
+        },
+        {
+          "id": "nlp-4",
+          "label": "Taxonomy mapping",
+          "summary": "Resolve alias to stable taxonomy ID and quarantine ambiguous candidates",
+          "technology": "Dictionary baseline",
+          "category": "purple",
+          "x": 885,
+          "y": 0,
+          "notes": "Inputs: Normalized alias and pinned version\nOutputs: Versioned skill IDs or review candidates"
+        },
+        {
+          "id": "nlp-5",
+          "label": "Job-skill association",
+          "summary": "Group repeated mentions into one skill association while retaining evidence",
+          "technology": "Dictionary baseline",
+          "category": "purple",
+          "x": 885,
+          "y": 205,
+          "notes": "Inputs: Job UUID, skill IDs and evidenced mentions\nOutputs: Versioned Enrichment payload"
+        },
+        {
+          "id": "nlp-6",
+          "label": "Database write-back",
+          "summary": "Publish atomically using the versioned idempotency key",
+          "technology": "PostgreSQL",
+          "category": "purple",
+          "x": 590,
+          "y": 205,
+          "notes": "Inputs: Enrichment payload and original description hash\nOutputs: New immutable enrichment run and active job links"
+        },
+        {
+          "id": "nlp-7",
+          "label": "Held-out evaluation",
+          "summary": "Compare pinned predictions with independent labels including failed runs",
+          "technology": "Dictionary baseline",
+          "category": "purple",
+          "x": 295,
+          "y": 205,
+          "notes": "Inputs: Blind gold, splits and model/taxonomy metadata\nOutputs: Precision, recall, F1, failures and normalization accuracy"
+        }
+      ],
+      "edges": [
+        {
+          "id": "nlp-flow-1",
+          "source": "nlp-1",
+          "target": "nlp-2",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "nlp-flow-2",
+          "source": "nlp-2",
+          "target": "nlp-3",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "nlp-flow-3",
+          "source": "nlp-3",
+          "target": "nlp-4",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "nlp-flow-4",
+          "source": "nlp-4",
+          "target": "nlp-5",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "bottom",
+          "targetPort": "top"
+        },
+        {
+          "id": "nlp-flow-5",
+          "source": "nlp-5",
+          "target": "nlp-6",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "left",
+          "targetPort": "right"
+        },
+        {
+          "id": "nlp-flow-6",
+          "source": "nlp-6",
+          "target": "nlp-7",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "left",
+          "targetPort": "right"
+        }
+      ]
+    },
+    "analytics": {
+      "nodes": [
+        {
+          "id": "analytics-1",
+          "label": "Curated data",
+          "summary": "Read canonical jobs and the approved active version of enrichment",
+          "technology": "PostgreSQL",
+          "category": "purple",
+          "x": 0,
+          "y": 0,
+          "notes": "Inputs: Jobs, job_skills and provenance views\nOutputs: Eligible rows with date basis and version"
+        },
+        {
+          "id": "analytics-2",
+          "label": "Filtering",
+          "summary": "Apply the same country, role and half-open date window to the complete cohort",
+          "technology": "PostgreSQL",
+          "category": "purple",
+          "x": 295,
+          "y": 0,
+          "notes": "Inputs: Curated records and normalized filter values\nOutputs: Eligible cohort including unenriched jobs"
+        },
+        {
+          "id": "analytics-3",
+          "label": "Aggregation",
+          "summary": "Count distinct canonical job IDs per skill and as denominators",
+          "technology": "PostgreSQL",
+          "category": "purple",
+          "x": 590,
+          "y": 0,
+          "notes": "Inputs: Eligible filtered job rows and enrichment joins\nOutputs: Skill counts, enrichment and date coverage"
+        },
+        {
+          "id": "analytics-4",
+          "label": "Trend calculation",
+          "summary": "Compare equal periods only when date and source coverage gates pass",
+          "technology": "PostgreSQL",
+          "category": "purple",
+          "x": 885,
+          "y": 0,
+          "notes": "Inputs: Comparable time windows and source mix\nOutputs: Trend points or insufficient-data state"
+        },
+        {
+          "id": "analytics-5",
+          "label": "Analytics service",
+          "summary": "Calculate pure metric responses behind one stable function",
+          "technology": "PostgreSQL",
+          "category": "purple",
+          "x": 885,
+          "y": 205,
+          "notes": "Inputs: Cohort, aggregate values and coverage policy\nOutputs: Typed reporting object and visible provenance notes"
+        },
+        {
+          "id": "analytics-6",
+          "label": "API response",
+          "summary": "Serialize stable counts and visible metadata under the v1 schema",
+          "technology": "PostgreSQL",
+          "category": "purple",
+          "x": 590,
+          "y": 205,
+          "notes": "Inputs: Service object and canonical filters\nOutputs: SkillDemand v1 or Error v1"
+        }
+      ],
+      "edges": [
+        {
+          "id": "analytics-flow-1",
+          "source": "analytics-1",
+          "target": "analytics-2",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "analytics-flow-2",
+          "source": "analytics-2",
+          "target": "analytics-3",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "analytics-flow-3",
+          "source": "analytics-3",
+          "target": "analytics-4",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "analytics-flow-4",
+          "source": "analytics-4",
+          "target": "analytics-5",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "bottom",
+          "targetPort": "top"
+        },
+        {
+          "id": "analytics-flow-5",
+          "source": "analytics-5",
+          "target": "analytics-6",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "left",
+          "targetPort": "right"
+        }
+      ]
+    },
+    "backend": {
+      "nodes": [
+        {
+          "id": "backend-1",
+          "label": "Frontend request",
+          "summary": "Interpret normalized query keys from the shared filters",
+          "technology": "FastAPI",
+          "category": "teal",
+          "x": 0,
+          "y": 0,
+          "notes": "Inputs: Role, country, date basis, range and cursor\nOutputs: Validated request or safe error"
+        },
+        {
+          "id": "backend-2",
+          "label": "API validation",
+          "summary": "Apply allowed values, limit bounds and date order through the route schema",
+          "technology": "FastAPI",
+          "category": "teal",
+          "x": 295,
+          "y": 0,
+          "notes": "Inputs: Incoming HTTP parameters\nOutputs: Typed filters or 422 Error v1"
+        },
+        {
+          "id": "backend-3",
+          "label": "Service layer",
+          "summary": "Route metric and job queries through typed application functions",
+          "technology": "FastAPI",
+          "category": "teal",
+          "x": 590,
+          "y": 0,
+          "notes": "Inputs: Validated request and data services\nOutputs: Result paired with request context"
+        },
+        {
+          "id": "backend-4",
+          "label": "Database and analytics",
+          "summary": "Call parameterized SQL or metrics service with one validated cohort",
+          "technology": "FastAPI",
+          "category": "teal",
+          "x": 885,
+          "y": 0,
+          "notes": "Inputs: Typed request, stable cursor and repository\nOutputs: Rows, coverage and cursor metadata"
+        },
+        {
+          "id": "backend-5",
+          "label": "Response",
+          "summary": "Return JSON plus request ID, or a safe dependency error",
+          "technology": "FastAPI",
+          "category": "teal",
+          "x": 885,
+          "y": 205,
+          "notes": "Inputs: Query result or categorized failure\nOutputs: 200 response, 422 bad input or 503 dependency error"
+        }
+      ],
+      "edges": [
+        {
+          "id": "backend-flow-1",
+          "source": "backend-1",
+          "target": "backend-2",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "backend-flow-2",
+          "source": "backend-2",
+          "target": "backend-3",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "backend-flow-3",
+          "source": "backend-3",
+          "target": "backend-4",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "backend-flow-4",
+          "source": "backend-4",
+          "target": "backend-5",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "bottom",
+          "targetPort": "top"
+        }
+      ]
+    },
+    "frontend": {
+      "nodes": [
+        {
+          "id": "frontend-1",
+          "label": "Filter controls",
+          "summary": "Keep country, role, date basis and range synchronized with URL state",
+          "technology": "React",
+          "category": "teal",
+          "x": 0,
+          "y": 0,
+          "notes": "Inputs: User selections and supported values\nOutputs: Canonical dashboard query"
+        },
+        {
+          "id": "frontend-2",
+          "label": "API client",
+          "summary": "Send bounded requests, abort stale requests and validate response shape",
+          "technology": "React",
+          "category": "teal",
+          "x": 295,
+          "y": 0,
+          "notes": "Inputs: Filter state and OpenAPI/fixture contract\nOutputs: Current metrics response or visible failure"
+        },
+        {
+          "id": "frontend-3",
+          "label": "Visualization",
+          "summary": "Render ranked normalized skills with sample sizes and date basis",
+          "technology": "React",
+          "category": "teal",
+          "x": 590,
+          "y": 0,
+          "notes": "Inputs: SkillDemand v1 payload\nOutputs: Connected chart or ranked table and provenance hint"
+        },
+        {
+          "id": "frontend-4",
+          "label": "Empty and error states",
+          "summary": "Distinguish no matches, unavailable service and loading; support keyboard interaction",
+          "technology": "React",
+          "category": "teal",
+          "x": 885,
+          "y": 0,
+          "notes": "Inputs: API client state\nOutputs: Accessible feedback and bounded retry action"
+        }
+      ],
+      "edges": [
+        {
+          "id": "frontend-flow-1",
+          "source": "frontend-1",
+          "target": "frontend-2",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "frontend-flow-2",
+          "source": "frontend-2",
+          "target": "frontend-3",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "frontend-flow-3",
+          "source": "frontend-3",
+          "target": "frontend-4",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        }
+      ]
+    },
+    "operations": {
+      "nodes": [
+        {
+          "id": "operations-1",
+          "label": "CI and checks",
+          "summary": "Run static, unit and disposable database tests on synthetic fixtures",
+          "technology": "Docker",
+          "category": "amber",
+          "x": 0,
+          "y": 0,
+          "notes": "Inputs: Versioned change and pinned environment\nOutputs: Reviewable test report and release gate status"
+        },
+        {
+          "id": "operations-2",
+          "label": "Scheduler",
+          "summary": "Start ingestion or processing under caps with overlap protection",
+          "technology": "Docker",
+          "category": "amber",
+          "x": 295,
+          "y": 0,
+          "notes": "Inputs: Approved run configuration and schedule\nOutputs: Run ID, checkpoint and terminal status"
+        },
+        {
+          "id": "operations-3",
+          "label": "Logs and health",
+          "summary": "Publish health and safe structured counters without payload or secrets",
+          "technology": "Docker",
+          "category": "amber",
+          "x": 590,
+          "y": 0,
+          "notes": "Inputs: Service checks and job ledgers\nOutputs: Probe result, duration, run ID and safe error class"
+        },
+        {
+          "id": "operations-4",
+          "label": "Backup and release",
+          "summary": "Exercise migrations and restore before freezing candidate",
+          "technology": "Docker",
+          "category": "amber",
+          "x": 885,
+          "y": 0,
+          "notes": "Inputs: Pinned Compose profile, permitted data and release manifest\nOutputs: Verified clean boot and rollback instructions"
+        }
+      ],
+      "edges": [
+        {
+          "id": "operations-flow-1",
+          "source": "operations-1",
+          "target": "operations-2",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "operations-flow-2",
+          "source": "operations-2",
+          "target": "operations-3",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        },
+        {
+          "id": "operations-flow-3",
+          "source": "operations-3",
+          "target": "operations-4",
+          "label": "",
+          "kind": "data",
+          "sourcePort": "right",
+          "targetPort": "left"
+        }
+      ]
+    }
+  }
+}
