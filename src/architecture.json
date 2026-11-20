@@ -100,7 +100,7 @@
           "technology": "Docker",
           "category": "amber",
           "x": 0,
-          "y": 510,
+          "y": 255,
           "notes": "Unit tests on each PR, integration with disposable PostgreSQL, smoke and restore on clean machine. Record run IDs, durations and safe error classes."
         }
       ],

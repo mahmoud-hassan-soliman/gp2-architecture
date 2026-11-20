@@ -146,7 +146,7 @@ footer { display: flex; justify-content: space-between; align-items: center; fle
 }
 @media (max-width: 880px) {
   .top { padding: 13px 16px; }
-  .workspace { grid-template-columns: minmax(0,1fr) 225px; }
+  .workspace { grid-template-columns: minmax(0,1fr); }
   .layers { grid-column: 1 / -1; }
   .layer-list { grid-template-columns: repeat(3,minmax(0,1fr)); }
   .layer-button { padding: 5px; font-size: 13px; }
