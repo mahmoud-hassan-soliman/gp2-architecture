@@ -7,7 +7,7 @@ import initial from './architecture.json';
 import { Tasks } from './Tasks.jsx';
 import { canConnect, CATEGORIES, changeGraph, deleteSelection, EDGE_KINDS, PORTS, ROOT, updateItem, validateArchitecture } from './model.js';
 
-const STORAGE = 'gp2-architecture-draft-v1';
+const STORAGE = 'gp2-architecture-draft-v2';
 const EMPTY = { nodes: [], edges: [] };
 const PORT_POSITIONS = { top: Position.Top, right: Position.Right, bottom: Position.Bottom, left: Position.Left };
 const EDGE_COLORS = { data: '#83aeca', enrichment: '#bda1fb', control: '#f4b66e' };
@@ -152,8 +152,10 @@ function App() {
     (n.label + ' ' + n.technology).toLowerCase().includes(search.trim().toLowerCase()))
     .map(n => ({ node: n, scope: location }))).slice(0, 9) : [];
   useEffect(() => {
-    try { localStorage.setItem(STORAGE, JSON.stringify(doc)); }
-    catch { setStatus('This browser could not save the draft. Export JSON before closing.'); }
+    try {
+      if (doc === seeded) localStorage.removeItem(STORAGE);
+      else localStorage.setItem(STORAGE, JSON.stringify(doc));
+    } catch { setStatus('This browser could not save the draft. Export JSON before closing.'); }
   }, [doc]);
 
   useEffect(() => {
