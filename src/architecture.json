@@ -59,7 +59,7 @@
           "summary": "Versioned skill enrichment",
           "technology": "Dictionary baseline",
           "category": "purple",
-          "x": 1140,
+          "x": 855,
           "y": 255,
           "notes": "Keep offsets in original text using a match-to-original map. Disambiguate short aliases. Store unmatched as candidates; publish results atomically by version."
         },
@@ -118,7 +118,7 @@
           "id": "ingestion-raw",
           "source": "ingestion",
           "target": "raw",
-          "label": "Raw records",
+          "label": "Raw batch",
           "kind": "data",
           "sourcePort": "right",
           "targetPort": "left"
@@ -136,7 +136,7 @@
           "id": "processing-storage",
           "source": "processing",
           "target": "storage",
-          "label": "Canonical jobs",
+          "label": "Curated",
           "kind": "data",
           "sourcePort": "right",
           "targetPort": "left"

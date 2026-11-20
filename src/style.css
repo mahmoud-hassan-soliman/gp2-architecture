@@ -83,6 +83,7 @@ h1 { font-size: clamp(30px, 4vw, 46px); line-height: 1.12; letter-spacing: -.045
 .react-flow__edge { cursor: pointer; }
 .react-flow__controls { box-shadow: none; border: 1px solid #3a4f67; border-radius: 8px; overflow: hidden; }
 .react-flow__controls .react-flow__controls-button { background: #192a40; border-bottom: 1px solid #2c4057; color: #d8e7fb; }
+.react-flow__controls .react-flow__controls-button svg { fill: #d8e7fb; }
 .fit-button { position: absolute; display: flex; align-items: center; gap: 7px; right: 12px; bottom: 12px; z-index: 4; font-size: 13px; }
 .empty-canvas { position: absolute; left: 18px; top: 53px; color: var(--muted); }
 .inspector { padding: 15px; overflow-wrap: anywhere; }

@@ -54,7 +54,7 @@ function Diagram({ graph, selection, editing, select, move, connect, reconnect, 
   })), [graph.nodes, positions, editing, selection]);
   const edges = useMemo(() => graph.edges.map(edge => ({
     id: edge.id, source: edge.source, target: edge.target, sourceHandle: edge.sourcePort, targetHandle: edge.targetPort,
-    label: edge.label, type: 'smoothstep', selected: selection?.type === 'edge' && edge.id === selection.id,
+    label: edge.label, type: 'smoothstep', pathOptions: { offset: edge.kind === 'enrichment' ? 43 : 19 }, selected: selection?.type === 'edge' && edge.id === selection.id,
     style: { stroke: EDGE_COLORS[edge.kind], strokeWidth: selection?.id === edge.id ? 3 : 1.7, strokeDasharray: edge.kind === 'control' ? '7 5' : undefined },
     markerEnd: { type: MarkerType.ArrowClosed, color: EDGE_COLORS[edge.kind], width: 19, height: 19 },
     labelStyle: { fill: '#c6d8e8', fontSize: 11 },
@@ -65,10 +65,12 @@ function Diagram({ graph, selection, editing, select, move, connect, reconnect, 
     <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes}
       colorMode="dark" connectionMode={ConnectionMode.Loose} nodesDraggable={editing} nodesConnectable={editing}
       edgesReconnectable={editing} deleteKeyCode={null} multiSelectionKeyCode={null}
-      selectionKeyCode={null} minZoom={0.16} maxZoom={2.5} fitView fitViewOptions={{ padding: .16, maxZoom: scope === ROOT ? .95 : 1.12 }}
+      selectionKeyCode={null} minZoom={0.16} maxZoom={2.5} fitView fitViewOptions={{ padding: '8%', maxZoom: scope === ROOT ? .95 : 1.12 }}
       isValidConnection={validConnection}
       onNodesChange={changes => {
-        const updates = Object.fromEntries(changes.filter(c => c.type === 'position' && c.position).map(c => [c.id, c.position]));
+        const positionChanges = changes.getByType('position').filter(c => c.position);
+        positionChanges.filter(c => !c.dragging).forEach(c => move(c.id, c.position));
+        const updates = Object.fromEntries(positionChanges.filter(c => c.dragging).map(c => [c.id, c.position]));
         if (Object.keys(updates).length) {
           movedDuringDrag.current = updates;
           setPositions(prev => ({ ...prev, ...updates }));
@@ -95,7 +97,7 @@ function Diagram({ graph, selection, editing, select, move, connect, reconnect, 
 
 function FitButton() {
   const { fitView } = useReactFlow();
-  return <button className="fit-button" onClick={() => fitView({ padding: .16, duration: 180 })}><Maximize size={15} /> Fit diagram</button>;
+  return <button className="fit-button" onClick={() => fitView({ padding: '8%', duration: 180 })}><Maximize size={15} /> Fit diagram</button>;
 }
 
 function Inspector({ item, selection, editing, patch, remove, graph, details, openDetails, close }) {
